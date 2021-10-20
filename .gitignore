@@ -8,4 +8,7 @@
 target
 input
 *.nt
+.gradle
+/build
+examples
 

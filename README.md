@@ -10,7 +10,7 @@ To set up codeontology, you have to clone the repository and build the tool:
 ```bash
 $ git clone https://github.com/codeontology/parser
 $ cd codeontology
-$ mvn package -DskipTests
+$ ./gradlew build
 ```
 
 Now, you can run the tool on any java project:
