@@ -34,10 +34,10 @@ import java.lang.reflect.TypeVariable
 import java.util.*
 import kotlin.collections.ArrayList
 
-public class TypeVariableEntity public constructor(reference: CtTypeReference<*>) : TypeEntity<CtType<*>>(reference) {
-    public var position: Int = 0
-    private lateinit var bounds: ArrayList<CtTypeReference<*>>
-    public override var parent: Entity<*>? = super.parent
+class TypeVariableEntity constructor(reference: CtTypeReference<*>) : TypeEntity<CtType<*>>(reference) {
+    var position: Int = 0
+    private var bounds = mutableListOf<CtTypeReference<*>>()
+    override var parent: Entity<*>? = super.parent
         set(parent) {
             if (!CodeOntology.processGenerics() || isWildcard()) {
                 field = parent
@@ -55,7 +55,7 @@ public class TypeVariableEntity public constructor(reference: CtTypeReference<*>
             }
 
             if (parent is GenericDeclarationEntity) {
-                realParent = findParent(parent as GenericDeclarationEntity<*>)
+                realParent = findParent(parent)
             }
 
             if (realParent == null) {
@@ -70,6 +70,9 @@ public class TypeVariableEntity public constructor(reference: CtTypeReference<*>
                 field = parent
                 TypeVariableCache.getInstance().putParent(simpleName, parent, realParent)
             }
+            else {
+                field = parent
+            }
         }
 
     init {
@@ -81,13 +84,13 @@ public class TypeVariableEntity public constructor(reference: CtTypeReference<*>
         val reference: CtTypeParameterReference = getReference() as CtTypeParameterReference
         val boundingType: CtTypeReference<*>? = reference.boundingType
         if (boundingType is CtIntersectionTypeReference) {
-            bounds = boundingType.asCtIntersectionTypeReference().bounds as ArrayList<CtTypeReference<*>>
+            bounds = boundingType.asCtIntersectionTypeReference().bounds
         } else if (boundingType != null) {
             bounds.add(boundingType)
         }
     }
 
-    public override fun extract() {
+    override fun extract() {
         if (!CodeOntology.processGenerics()) {
             return
         }
@@ -100,14 +103,17 @@ public class TypeVariableEntity public constructor(reference: CtTypeReference<*>
         getLogger().addTriple(this, Ontology.POSITION_PROPERTY, model.createTypedLiteral(position))
     }
 
-    public fun tagBounds() {
+    private fun tagBounds() {
         bounds.forEach(this::tagBound)
     }
 
     private fun tagBound(boundReference: CtTypeReference<*>) {
         val bound: TypeEntity<*> = getFactory().wrap(boundReference)!!
         bound.parent = this.parent
-        if ((getReference() as CtWildcardReference).isUpper) {
+
+        val ownReference = getReference()
+
+        if (ownReference is CtWildcardReference && ownReference.isUpper) {
             getLogger().addTriple(this, Ontology.EXTENDS_PROPERTY, bound)
         } else {
             getLogger().addTriple(this, Ontology.SUPER_PROPERTY, bound)
@@ -115,7 +121,7 @@ public class TypeVariableEntity public constructor(reference: CtTypeReference<*>
         bound.follow()
     }
 
-    public override fun buildRelativeURI(): String {
+    override fun buildRelativeURI(): String {
         if (!CodeOntology.processGenerics()) {
             return getReference().simpleName
         }
@@ -130,7 +136,9 @@ public class TypeVariableEntity public constructor(reference: CtTypeReference<*>
     }
 
     private fun wildcardURI(): String {
-        val clause: String = if((getReference() as CtWildcardReference).isUpper) {
+        val ownReference = getReference()
+
+        val clause: String = if(ownReference is CtWildcardReference && ownReference.isUpper) {
             "extends"
         } else {
             "super"
@@ -152,7 +160,7 @@ public class TypeVariableEntity public constructor(reference: CtTypeReference<*>
         return uri
     }
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return if (isWildcard()) {
             Ontology.WILDCARD_ENTITY
         } else {
@@ -164,8 +172,7 @@ public class TypeVariableEntity public constructor(reference: CtTypeReference<*>
         val executableReference: CtExecutableReference<*> = executable.reference as CtExecutableReference<*>
 
         return if (executable.isDeclarationAvailable()) {
-            val parameters: List<CtTypeReference<*>> = TypeVariableList((executable.element as
-                    GenericDeclarationEntity<*>).getFormalTypeParameters() as List<CtTypeReference<*>>)
+            val parameters: List<CtTypeReference<*>> = TypeVariableList((executable.element as CtExecutable<*>).reference.actualTypeArguments)
             if (parameters.contains(getReference())) {
                 executable
             } else {
@@ -280,10 +287,10 @@ public class TypeVariableEntity public constructor(reference: CtTypeReference<*>
                 }
             }
 
-            val contextParent = tempContext.getParent(GenericDeclarationEntity::class.java)
+            val newParent: Entity<*>? = tempContext.getParent(GenericDeclarationEntity::class.java)
 
-            tempContext = if(contextParent != null) {
-                contextParent as GenericDeclarationEntity<*>
+            tempContext = if(newParent != null) {
+                newParent as GenericDeclarationEntity<*>
             } else {
                 null
             }
@@ -291,13 +298,13 @@ public class TypeVariableEntity public constructor(reference: CtTypeReference<*>
         return null
     }
 
-    public fun isWildcard(): Boolean {
+    private fun isWildcard(): Boolean {
         return getReference().simpleName.equals("?")
     }
 }
 
 class TypeVariableList(parameters: List<CtTypeReference<*>>): ArrayList<CtTypeReference<*>>(parameters) {
-    public override fun contains(element: CtTypeReference<*>): Boolean {
+    override fun contains(element: CtTypeReference<*>): Boolean {
         if (element !is CtTypeParameterReference) {
             return super.contains(element)
         }
@@ -323,7 +330,7 @@ class TypeVariableCache {
         @JvmStatic private val COLS: Int = 48
         @JvmStatic private val MAX_SIZE: Int = (ROWS * COLS) / 2
 
-        @JvmStatic public fun getInstance(): TypeVariableCache {
+        @JvmStatic fun getInstance(): TypeVariableCache {
             if (instance == null) {
                 instance = TypeVariableCache()
             }
@@ -335,11 +342,11 @@ class TypeVariableCache {
     private var table: Hashtable<String, Hashtable<Entity<*>, Entity<*>>> = Hashtable(MAX_SIZE)
     private var size: Int = 0
 
-    public fun getParent(name: String, context: Entity<*>): Entity<*>? {
+    fun getParent(name: String, context: Entity<*>): Entity<*>? {
         return table[name]?.get(context)
     }
 
-    public fun putParent(name: String, context: Entity<*>, parent: Entity<*>) {
+    fun putParent(name: String, context: Entity<*>, parent: Entity<*>) {
         handleSize()
         var contexts: Hashtable<Entity<*>, Entity<*>>? = table[name]
 

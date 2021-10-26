@@ -22,10 +22,10 @@ import org.codeontology.extraction.EntityFactory
 import org.codeontology.extraction.RDFLogger
 import org.codeontology.extraction.declaration.TypeVariableEntity
 import spoon.reflect.declaration.CtFormalTypeDeclarer
-import spoon.reflect.reference.CtTypeReference
+import spoon.reflect.declaration.CtTypeParameter
 
-public class FormalTypeParametersTagger(private val genericDeclaration: GenericDeclarationEntity<*>) {
-    public fun tagFormalTypeParameters() {
+class FormalTypeParametersTagger(private val genericDeclaration: GenericDeclarationEntity<*>) {
+    fun tagFormalTypeParameters() {
         if(!CodeOntology.processGenerics()) {
             return
         }
@@ -40,11 +40,11 @@ public class FormalTypeParametersTagger(private val genericDeclaration: GenericD
     }
 
     companion object {
-        @JvmStatic public fun formalTypeParametersOf(genericDeclaration: GenericDeclarationEntity<*>): List<TypeVariableEntity> {
+        @JvmStatic fun formalTypeParametersOf(genericDeclaration: GenericDeclarationEntity<*>): List<TypeVariableEntity> {
             val typeVariables = mutableListOf<TypeVariableEntity>()
 
             if(genericDeclaration.element != null && CodeOntology.processGenerics()) {
-                val parameters: List<CtTypeReference<*>> = (genericDeclaration.element as CtFormalTypeDeclarer).formalCtTypeParameters as List<CtTypeReference<*>>
+                val parameters: List<CtTypeParameter> = (genericDeclaration.element as CtFormalTypeDeclarer).formalCtTypeParameters
                 for(parameter in parameters) {
                     val entity: Entity<*>? = EntityFactory.getInstance().wrap(parameter)
 

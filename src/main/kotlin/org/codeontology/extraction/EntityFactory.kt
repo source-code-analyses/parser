@@ -42,10 +42,10 @@ import java.util.ArrayList
 import java.util.jar.JarFile
 import java.util.stream.Collectors
 
-public class EntityFactory {
+class EntityFactory {
     companion object {
         @JvmStatic private var instance: EntityFactory? = null
-        @JvmStatic public fun getInstance(): EntityFactory {
+        @JvmStatic fun getInstance(): EntityFactory {
             if(instance == null) {
                 instance = EntityFactory()
             }
@@ -54,31 +54,35 @@ public class EntityFactory {
         }
     }
 
-    public fun wrap(pack: CtPackage): PackageEntity {
+    fun wrap(pack: CtPackage): PackageEntity {
         return PackageEntity(pack)
     }
 
-    public fun wrap(pack: CtPackageReference): PackageEntity {
+    fun wrap(pack: CtPackageReference): PackageEntity {
         return PackageEntity(pack)
     }
 
-    public fun wrap(field: CtField<*>): FieldEntity {
+    fun wrap(field: CtField<*>): FieldEntity {
         return FieldEntity(field)
     }
 
-    public fun wrap(field: CtFieldReference<*>): FieldEntity {
+    fun wrap(field: CtFieldReference<*>): FieldEntity {
         return FieldEntity(field)
     }
 
-    public fun wrap(method: CtMethod<*>): MethodEntity {
+    fun wrap(method: CtMethod<*>): MethodEntity {
         return MethodEntity(method)
     }
 
-    public fun wrap(type: CtType<*>): TypeEntity<*>? {
+    fun wrap(type: CtType<*>): TypeEntity<*>? {
         return wrap(type.reference)
     }
 
-    public fun wrap(reference: CtTypeReference<*>): TypeEntity<*>? {
+    fun wrap(reference: CtTypeReference<*>?): TypeEntity<*>? {
+        if(reference == null) {
+            return null
+        }
+
         var entity: TypeEntity<*>? = null
 
         if (reference.qualifiedName.equals(CtTypeReference.NULL_TYPE_NAME)) {
@@ -107,11 +111,11 @@ public class EntityFactory {
         return entity
     }
 
-    public fun wrap(variable: CtLocalVariable<*>): LocalVariableEntity {
+    fun wrap(variable: CtLocalVariable<*>): LocalVariableEntity {
         return LocalVariableEntity(variable)
     }
 
-    public fun wrap(parameter: CtParameter<*>): ParameterEntity? {
+    fun wrap(parameter: CtParameter<*>): ParameterEntity? {
         return try {
             ParameterEntity(parameter)
         } catch (e: NullTypeException) {
@@ -119,15 +123,15 @@ public class EntityFactory {
         }
     }
 
-    public fun wrapByTypeReference(reference: CtTypeReference<*>): ParameterEntity {
+    fun wrapByTypeReference(reference: CtTypeReference<*>): ParameterEntity {
         return ParameterEntity(reference)
     }
 
-    public fun wrap(construct: CtConstructor<*>): ConstructorEntity {
+    fun wrap(construct: CtConstructor<*>): ConstructorEntity {
         return ConstructorEntity(construct)
     }
 
-    public fun wrap(reference: CtExecutableReference<*>): ExecutableEntity<*> {
+    fun wrap(reference: CtExecutableReference<*>): ExecutableEntity<*> {
         return if (reference.isConstructor) {
             ConstructorEntity(reference)
         } else {
@@ -135,46 +139,46 @@ public class EntityFactory {
         }
     }
 
-    public fun wrap(lambda: CtLambda<*>): LambdaEntity {
+    fun wrap(lambda: CtLambda<*>): LambdaEntity {
         return LambdaEntity(lambda)
     }
 
-    public fun wrap(typeVariable: TypeVariable<*>): TypeVariableEntity {
+    fun wrap(typeVariable: TypeVariable<*>): TypeVariableEntity {
         val reference: CtTypeParameterReference = reflectionFactory().createTypeVariableReference(typeVariable)
         return TypeVariableEntity(reference)
     }
 
-    public fun wrap(array: GenericArrayType): ArrayEntity {
+    fun wrap(array: GenericArrayType): ArrayEntity {
         val reference: CtTypeReference<*> = reflectionFactory().createGenericArrayReference(array)
         return ArrayEntity(reference)
     }
 
-    public fun wrap(parameterizedType: ParameterizedType): ParameterizedTypeEntity {
+    fun wrap(parameterizedType: ParameterizedType): ParameterizedTypeEntity {
         val reference: CtTypeReference<*> = reflectionFactory().createParameterizedTypeReference(parameterizedType)
         return ParameterizedTypeEntity(reference)
     }
 
-    public fun wrap(type: Type): TypeEntity<*>? {
+    fun wrap(type: Type): TypeEntity<*>? {
         return wrap(reflectionFactory().createTypeReference(type))
     }
 
-    public fun wrap(project: DefaultProject): DefaultProjectEntity {
+    fun wrap(project: DefaultProject): DefaultProjectEntity {
         return DefaultProjectEntity(project)
     }
 
-    public fun wrap(project: GradleProject): GradleProjectEntity {
+    fun wrap(project: GradleProject): GradleProjectEntity {
         return GradleProjectEntity(project)
     }
 
-    public fun wrap(project: MavenProject): MavenProjectEntity {
+    fun wrap(project: MavenProject): MavenProjectEntity {
         return MavenProjectEntity(project)
     }
 
-    public fun wrap(project: AndroidProject): GradleProjectEntity {
+    fun wrap(project: AndroidProject): GradleProjectEntity {
         return GradleProjectEntity(project)
     }
 
-    public fun wrap(jarFile: JarFile): JarFileEntity {
+    fun wrap(jarFile: JarFile): JarFileEntity {
         return JarFileEntity(jarFile)
     }
 
@@ -188,7 +192,7 @@ public class EntityFactory {
      *                                                          *
      ************************************************************/
 
-    public fun wrap(statement: CtStatement): StatementEntity<*> {
+    fun wrap(statement: CtStatement): StatementEntity<*> {
         return when(StatementKind.getKindOf(statement)) {
             StatementKind.BLOCK -> BlockEntity(statement as CtBlock<*>)
             StatementKind.IF_THEN_ELSE -> IfThenElseEntity(statement as CtIf)
@@ -211,7 +215,7 @@ public class EntityFactory {
         }
     }
 
-    public fun wrap(statements: List<CtStatement>): StatementExpressionListEntity {
+    fun wrap(statements: List<CtStatement>): StatementExpressionListEntity {
         val statementExpressionWrapper = { statement: CtStatement ->
             if (statement is CtExpression<*>) {
                 wrap(statement as CtExpression<*>)
@@ -226,11 +230,11 @@ public class EntityFactory {
         return StatementExpressionListEntity(list)
     }
 
-    public fun wrap(catcher: CtCatch): CatchEntity {
+    fun wrap(catcher: CtCatch): CatchEntity {
         return CatchEntity(catcher)
     }
 
-    public fun wrap(expression: CtExpression<*>): ExpressionEntity<*> {
+    fun wrap(expression: CtExpression<*>): ExpressionEntity<*> {
         if (!CodeOntology.processExpressions()) {
             return ExpressionEntity(expression)
         }
@@ -243,7 +247,7 @@ public class EntityFactory {
         }
     }
 
-    public fun wrap(variable: CtVariable<*>): Entity<*>? {
+    fun wrap(variable: CtVariable<*>): Entity<*>? {
         if (variable is CtField<*>) {
             return FieldEntity(variable)
         }
@@ -255,7 +259,7 @@ public class EntityFactory {
         return null
     }
 
-    public fun wrap(label: CtCase<*>): SwitchLabelEntity {
+    fun wrap(label: CtCase<*>): SwitchLabelEntity {
         if (label.caseExpression != null) {
             return CaseLabelEntity(label)
         }

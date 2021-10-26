@@ -20,7 +20,6 @@ import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
 import org.codeontology.docparser.DocCommentParser
 import org.codeontology.docparser.Tag
-import org.codeontology.extraction.Entity
 import org.codeontology.extraction.ReflectionFactory
 import org.codeontology.extraction.support.FormalTypeParametersTagger
 import org.codeontology.extraction.support.GenericDeclarationEntity
@@ -33,15 +32,15 @@ import java.lang.reflect.Method
 import java.lang.reflect.Type
 import java.lang.reflect.TypeVariable
 
-public class MethodEntity: ExecutableEntity<CtMethod<*>>, GenericDeclarationEntity<CtMethod<*>> {
-    public constructor(method: CtMethod<*>): super(method)
-    public constructor(reference: CtExecutableReference<*>): super(reference)
+class MethodEntity: ExecutableEntity<CtMethod<*>>, GenericDeclarationEntity<CtMethod<*>> {
+    constructor(method: CtMethod<*>): super(method)
+    constructor(reference: CtExecutableReference<*>): super(reference)
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.METHOD_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagReturns()
         if (isDeclarationAvailable()) {
@@ -51,7 +50,7 @@ public class MethodEntity: ExecutableEntity<CtMethod<*>>, GenericDeclarationEnti
         }
     }
 
-    public fun tagOverrides() {
+    private fun tagOverrides() {
         try {
             val reference: CtExecutableReference<*>? = (this.reference as CtExecutableReference<*>).overridingExecutable
             if (reference != null) {
@@ -66,22 +65,25 @@ public class MethodEntity: ExecutableEntity<CtMethod<*>>, GenericDeclarationEnti
         }
     }
 
-    public fun tagReturns() {
-        getLogger().addTriple(this, Ontology.RETURN_TYPE_PROPERTY, getReturnType())
+    private fun tagReturns() {
+        if(getReturnType() != null)
+        {
+            getLogger().addTriple(this, Ontology.RETURN_TYPE_PROPERTY, getReturnType()!!)
+        }
     }
 
-    private fun getReturnType(): TypeEntity<*> {
+    private fun getReturnType(): TypeEntity<*>? {
         var returnType: TypeEntity<*>? = getGenericReturnType()
         if (returnType != null) {
             return returnType
         }
 
-        val reference: CtTypeReference<*> = (this.reference as CtExecutableReference<*>).type
+        val reference: CtTypeReference<*>? = (this.reference as CtExecutableReference<*>).type
         returnType = getFactory().wrap(reference)
         returnType?.parent = this
         returnType?.follow()
 
-        return returnType!!
+        return returnType
     }
 
     private fun getGenericReturnType(): TypeEntity<*>? {
@@ -108,15 +110,15 @@ public class MethodEntity: ExecutableEntity<CtMethod<*>>, GenericDeclarationEnti
         }
     }
 
-    public override fun getFormalTypeParameters(): List<TypeVariableEntity> {
+    override fun getFormalTypeParameters(): List<TypeVariableEntity> {
         return FormalTypeParametersTagger.formalTypeParametersOf(this)
     }
 
-    public override fun tagFormalTypeParameters() {
+    override fun tagFormalTypeParameters() {
         FormalTypeParametersTagger(this).tagFormalTypeParameters()
     }
 
-    public fun getReturnDescription(): String? {
+    private fun getReturnDescription(): String? {
         val comment: String = element?.docComment ?: return null
 
         val parser = DocCommentParser(comment)
@@ -128,7 +130,7 @@ public class MethodEntity: ExecutableEntity<CtMethod<*>>, GenericDeclarationEnti
         return tags[0].text
     }
 
-    public fun tagReturnDescription() {
+    private fun tagReturnDescription() {
         val description: String? = getReturnDescription()
         if (getReturnDescription() != null) {
             val literal: Literal = model.createTypedLiteral(description)

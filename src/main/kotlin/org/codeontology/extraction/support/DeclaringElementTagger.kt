@@ -18,8 +18,10 @@ package org.codeontology.extraction.support
 import org.codeontology.Ontology
 import org.codeontology.extraction.RDFLogger
 
-public class DeclaringElementTagger(private val member: MemberEntity<*>) {
-    public fun tagDeclaredBy() {
-        RDFLogger.getInstance().addTriple(member, Ontology.DECLARED_BY_PROPERTY, member.getDeclaringElement()!!)
+class DeclaringElementTagger(private val member: MemberEntity<*>) {
+    fun tagDeclaredBy() {
+        if(member.getDeclaringElement() != null) {
+            RDFLogger.getInstance().addTriple(member, Ontology.DECLARED_BY_PROPERTY, member.getDeclaringElement()!!)
+        }
     }
 }
