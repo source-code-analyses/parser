@@ -18,7 +18,7 @@ package org.codeontology.extraction.support
 import org.codeontology.extraction.Entity
 import org.codeontology.extraction.expression.ExpressionEntity
 
-public interface VariableDeclarationEntity<T>: Entity<T> {
+interface VariableDeclarationEntity<T>: Entity<T> {
     fun getInitializer(): ExpressionEntity<*>?
 
     fun tagInitializer()

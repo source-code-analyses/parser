@@ -23,15 +23,15 @@ import org.codeontology.extraction.expression.ExpressionEntity
 import spoon.reflect.code.CtExpression
 import spoon.reflect.declaration.CtVariable
 
-public class VariableDeclarationTagger(private val declaration: VariableDeclarationEntity<*>) {
-    public fun tagVariable() {
+class VariableDeclarationTagger(private val declaration: VariableDeclarationEntity<*>) {
+    fun tagVariable() {
         val variable = declaration.getVariable()!!
 
         RDFLogger.getInstance().addTriple(variable, Ontology.DECLARATION_PROPERTY, declaration)
         variable.extract()
     }
 
-    public fun tagInitializer() {
+    fun tagInitializer() {
         val expression = declaration.getInitializer()!!
 
         RDFLogger.getInstance().addTriple(declaration, Ontology.INITIALIZER_PROPERTY, expression)
@@ -39,7 +39,8 @@ public class VariableDeclarationTagger(private val declaration: VariableDeclarat
     }
 
     companion object {
-        @JvmStatic public fun initializerOf(declaration: VariableDeclarationEntity<out CtVariable<*>>): ExpressionEntity<*>? {
+        @JvmStatic
+        fun initializerOf(declaration: VariableDeclarationEntity<out CtVariable<*>>): ExpressionEntity<*>? {
             val defaultExpression: CtExpression<*>? = declaration.element!!.defaultExpression
             if(defaultExpression != null) {
                 val initializer: ExpressionEntity<*> = EntityFactory.getInstance().wrap(declaration.element!!) as ExpressionEntity<*>
@@ -50,7 +51,8 @@ public class VariableDeclarationTagger(private val declaration: VariableDeclarat
             return null
         }
 
-        @JvmStatic public fun declaredVariableOf(declaration: VariableDeclarationEntity<out CtVariable<*>>): Entity<*>? {
+        @JvmStatic
+        fun declaredVariableOf(declaration: VariableDeclarationEntity<out CtVariable<*>>): Entity<*>? {
             val declaredVariable: Entity<*>? = EntityFactory.getInstance().wrap(declaration.element!!)
 
             if(declaredVariable != null) {

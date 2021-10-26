@@ -24,8 +24,8 @@ import java.io.IOException
 import java.io.PrintWriter
 import kotlin.system.exitProcess
 
-public class RDFLogger {
-    public var model: Model = Ontology.model
+class RDFLogger {
+    var model: Model = Ontology.model
         private set
     private var outputFile: String = "triples.nt"
     private var counter: Int = 0
@@ -33,7 +33,8 @@ public class RDFLogger {
     companion object {
         @JvmStatic private var instance: RDFLogger? = null
         @JvmStatic private val maxSize: Int = 10000
-        @JvmStatic public fun getInstance(): RDFLogger {
+        @JvmStatic
+        fun getInstance(): RDFLogger {
             if(instance == null) {
                 instance = RDFLogger()
             }
@@ -42,11 +43,11 @@ public class RDFLogger {
         }
     }
 
-    public fun setOutputFile(path: String) {
+    fun setOutputFile(path: String) {
         outputFile = path
     }
 
-    public fun writeRDF() {
+    fun writeRDF() {
         val writer = PrintWriter(BufferedWriter(FileWriter(outputFile, true)))
 
         try {
@@ -59,11 +60,11 @@ public class RDFLogger {
         }
     }
 
-    public fun addTriple(subject: Entity<*>, property: Property, obj: Entity<*>) {
+    fun addTriple(subject: Entity<*>, property: Property, obj: Entity<*>) {
         addTriple(subject, property, obj.getResource())
     }
 
-    public fun addTriple(subject: Entity<*>, property: Property?, obj: RDFNode?) {
+    fun addTriple(subject: Entity<*>, property: Property?, obj: RDFNode?) {
         if (property != null && obj != null) {
             val triple: Statement = model.createStatement(subject.getResource(), property, obj)
             model.add(triple)

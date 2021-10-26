@@ -21,14 +21,16 @@ import java.util.regex.Pattern
 import java.util.stream.Collectors
 import kotlin.collections.ArrayList
 
-public class DocCommentParser(comment: String) {
+class DocCommentParser(comment: String) {
     private lateinit var comment: String
     private lateinit var tags: ArrayList<Tag>
     private var parsed: Boolean = false
 
     companion object {
-        @JvmStatic public final val REGEXP: String = "^\\s*(@\\w+)\\s+(.*)$"
-        @JvmStatic public final val PATTERN: Pattern = Pattern.compile(REGEXP, Pattern.DOTALL)
+        @JvmStatic
+        val REGEXP: String = "^\\s*(@\\w+)\\s+(.*)$"
+        @JvmStatic
+        val PATTERN: Pattern = Pattern.compile(REGEXP, Pattern.DOTALL)
     }
 
     init {
@@ -41,7 +43,7 @@ public class DocCommentParser(comment: String) {
         tags = ArrayList()
     }
 
-    public fun parse() {
+    fun parse() {
         val scanner = Scanner("\n" + removeDescription())
         scanner.useDelimiter("\\n\\s*@")
         while(scanner.hasNext()) {
@@ -79,20 +81,20 @@ public class DocCommentParser(comment: String) {
         return ""
     }
 
-    public fun getParamTags(): ArrayList<Tag> {
+    fun getParamTags(): ArrayList<Tag> {
         return getTags(ParamTag.TAG)
     }
 
-    public fun getReturnTags(): ArrayList<Tag> {
+    fun getReturnTags(): ArrayList<Tag> {
         return getTags(ReturnTag.TAG)
     }
 
-    public fun getTags(name: String): ArrayList<Tag> {
+    fun getTags(name: String): ArrayList<Tag> {
         if(!parsed) {
             parse()
         }
 
-        return tags.stream().filter { it.name.equals(name) }.collect(Collectors.toCollection(::ArrayList))
+        return tags.stream().filter { it.name == name }.collect(Collectors.toCollection(::ArrayList))
     }
 
     private fun getMatcher(current: String): Matcher {

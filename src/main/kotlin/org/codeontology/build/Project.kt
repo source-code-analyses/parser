@@ -22,20 +22,20 @@ import java.io.FileNotFoundException
 import java.util.ArrayList
 import java.util.Scanner
 
-public abstract class Project(projectDirectory: File) {
-    public lateinit var subProjects: Collection<Project>
+abstract class Project(projectDirectory: File) {
+    lateinit var subProjects: Collection<Project>
         protected set
-    public var root = projectDirectory
-    public open var projectDirectory: File = projectDirectory
+    var root = projectDirectory
+    open var projectDirectory: File = projectDirectory
         protected set
 
     protected abstract fun findSubProjects(): Collection<Project>
 
-    public fun getFactory(): ProjectFactory {
+    fun getFactory(): ProjectFactory {
         return ProjectFactory.getInstance()
     }
 
-    public fun getBuildFileContent(): String {
+    fun getBuildFileContent(): String {
         val buildPath: File? = getBuildFile()
 
         if (buildPath != null) {
@@ -57,13 +57,13 @@ public abstract class Project(projectDirectory: File) {
         return ""
     }
 
-    public abstract fun getBuildFile(): File?
+    abstract fun getBuildFile(): File?
 
-    public fun getPath(): String {
+    fun getPath(): String {
         return projectDirectory.path
     }
 
-    public abstract fun getLoader(): DependenciesLoader<Project>
+    abstract fun getLoader(): DependenciesLoader<Project>
 
     protected open fun initSubProjects(files: Collection<File>): Collection<Project> {
         val result: ArrayList<Project> = ArrayList()
@@ -76,9 +76,9 @@ public abstract class Project(projectDirectory: File) {
         return result
     }
 
-    public fun getName(): String {
+    fun getName(): String {
         return projectDirectory.name
     }
 
-    public abstract fun accept(visitor: ProjectVisitor)
+    abstract fun accept(visitor: ProjectVisitor)
 }

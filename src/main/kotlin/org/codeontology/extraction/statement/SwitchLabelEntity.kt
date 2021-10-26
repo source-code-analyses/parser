@@ -23,10 +23,10 @@ import org.codeontology.extraction.support.StatementsTagger
 import spoon.reflect.code.CtCase
 import spoon.reflect.code.CtStatement
 
-public abstract class SwitchLabelEntity(label: CtCase<*>): CodeElementEntity<CtCase<*>>(label), StatementsHolderEntity<CtCase<*>> {
-    public var next: SwitchLabelEntity? = null
+abstract class SwitchLabelEntity(label: CtCase<*>): CodeElementEntity<CtCase<*>>(label), StatementsHolderEntity<CtCase<*>> {
+    var next: SwitchLabelEntity? = null
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagStatements()
         tagLine()
@@ -34,26 +34,26 @@ public abstract class SwitchLabelEntity(label: CtCase<*>): CodeElementEntity<CtC
         tagNext()
     }
 
-    public fun tagNext() {
+    fun tagNext() {
         if (next != null) {
             getLogger().addTriple(this, Ontology.NEXT_PROPERTY, next!!)
         }
     }
 
-    public override fun getStatements(): List<StatementEntity<*>> {
+    override fun getStatements(): List<StatementEntity<*>> {
         val statements: List<CtStatement> = element?.statements ?: ArrayList()
         return StatementsTagger(this).asEntities(statements)
     }
 
-    public override fun tagStatements() {
+    override fun tagStatements() {
         StatementsTagger(this).tagStatements()
     }
 
-    public fun tagLine() {
+    fun tagLine() {
         LineTagger(this).tagLine()
     }
 
-    public fun tagEndLine() {
+    fun tagEndLine() {
         LineTagger(this).tagEndLine()
     }
 }

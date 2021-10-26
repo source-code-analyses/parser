@@ -15,24 +15,22 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.extraction.declaration
 
-import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.Property
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
 import org.codeontology.extraction.Entity
-import org.codeontology.extraction.RDFLogger
 import spoon.reflect.declaration.CtClass
 import spoon.reflect.reference.CtTypeReference
 
-public class AnonymousClassEntity<T> public constructor(anonymousClass: CtClass<T>):
+class AnonymousClassEntity<T> constructor(anonymousClass: CtClass<T>):
     ClassEntity<T>(anonymousClass) {
     companion object {
-        @JvmStatic public val TAG: String = "anonymous-class"
+        @JvmStatic val TAG: String = "anonymous-class"
     }
 
-    public val requestedResources: HashSet<Entity<*>> = HashSet()
+    val requestedResources: HashSet<Entity<*>> = HashSet()
 
-    public override fun buildRelativeURI(): String {
+    override fun buildRelativeURI(): String {
         return parent!!.getRelativeURI() + SEPARATOR + TAG + SEPARATOR + element!!.simpleName
     }
 
@@ -40,7 +38,7 @@ public class AnonymousClassEntity<T> public constructor(anonymousClass: CtClass<
         return Ontology.ANONYMOUS_CLASS_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagSuperType()
         tagComment()
@@ -50,7 +48,7 @@ public class AnonymousClassEntity<T> public constructor(anonymousClass: CtClass<
         tagNestedTypes()
     }
 
-    public fun tagSuperType() {
+    private fun tagSuperType() {
         val references: Set<CtTypeReference<*>> = getReference().superInterfaces
         val superTypeReference: CtTypeReference<*>
         val property: Property
@@ -68,7 +66,7 @@ public class AnonymousClassEntity<T> public constructor(anonymousClass: CtClass<
         superType.follow()
     }
 
-    public override fun tagMethods() {
+    override fun tagMethods() {
         val methods: List<MethodEntity> = getMethods()
         for(method: MethodEntity in methods) {
             method.extract()
@@ -76,11 +74,16 @@ public class AnonymousClassEntity<T> public constructor(anonymousClass: CtClass<
         }
     }
 
-    public override fun tagFields() {
+    override fun tagFields() {
         val fields: List<FieldEntity> = getFields()
         for (field: FieldEntity in fields) {
             field.extract()
-            requestedResources.add(field.getJavaType())
+
+            val fieldType = field.getJavaType()
+
+            if(fieldType != null) {
+                requestedResources.add(fieldType)
+            }
         }
     }
 }

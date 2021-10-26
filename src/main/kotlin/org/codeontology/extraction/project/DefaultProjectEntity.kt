@@ -18,10 +18,9 @@ package org.codeontology.extraction.project
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
 import org.codeontology.build.DefaultProject
-import org.codeontology.extraction.Entity
 
-public class DefaultProjectEntity(project: DefaultProject): ProjectEntity<DefaultProject>(project) {
-    protected override fun getType(): RDFNode {
+class DefaultProjectEntity(project: DefaultProject): ProjectEntity<DefaultProject>(project) {
+    override fun getType(): RDFNode {
         return Ontology.PROJECT_ENTITY
     }
 }

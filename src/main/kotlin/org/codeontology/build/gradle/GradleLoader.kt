@@ -12,9 +12,10 @@ import java.util.Scanner
 import java.util.regex.Pattern
 
 
-public open class GradleLoader(project: GradleProject): DependenciesLoader<GradleProject>(project) {
+open class GradleLoader(project: GradleProject): DependenciesLoader<GradleProject>(project) {
     companion object {
-        @JvmStatic public val CLASSPATH_FILE_NAME: String = "cp" + CodeOntology.SUFFIX
+        @JvmStatic
+        val CLASSPATH_FILE_NAME: String = "cp" + CodeOntology.SUFFIX
     }
 
     private val gradleLocalRepository: File = File(System.getProperty("user.home") + "/.gradle")
@@ -22,7 +23,7 @@ public open class GradleLoader(project: GradleProject): DependenciesLoader<Gradl
     private val output: File = File(project.projectDirectory.path + "/output")
     private var localPropertiesHandled: Boolean = false
 
-    public override fun loadDependencies() {
+    override fun loadDependencies() {
         println("Loading dependencies with gradle...")
 
         handleLocalProperties()
@@ -47,7 +48,7 @@ public open class GradleLoader(project: GradleProject): DependenciesLoader<Gradl
         }
     }
 
-    public fun handleLocalProperties() {
+    fun handleLocalProperties() {
         if (localPropertiesHandled) {
             return
         }
@@ -129,14 +130,14 @@ public open class GradleLoader(project: GradleProject): DependenciesLoader<Gradl
         }
     }
 
-    protected fun loadAllAvailableJars() {
+    private fun loadAllAvailableJars() {
         loader.loadAllJars(project.root)
         loader.lock()
         loader.loadAllJars(gradleLocalRepository)
         loader.release()
     }
 
-    public fun downloadDependencies() {
+    fun downloadDependencies() {
         try {
             println("Downloading dependencies...")
             getProcessBuilder("dependencies").start().waitFor()
@@ -170,7 +171,7 @@ public open class GradleLoader(project: GradleProject): DependenciesLoader<Gradl
         runTask(cpFileTask)
     }
 
-    protected fun applyPlugin(plugin: String) {
+    private fun applyPlugin(plugin: String) {
         val writer = PrintWriter(BufferedWriter(FileWriter(project.getBuildFile()!!, true)))
 
         try {
@@ -186,7 +187,7 @@ public open class GradleLoader(project: GradleProject): DependenciesLoader<Gradl
         }
     }
 
-    public fun hasPlugin(plugin: String): Boolean {
+    fun hasPlugin(plugin: String): Boolean {
         val buildFile: String = project.getBuildFileContent()
         val regex = ".*apply\\s+plugin\\s*:\\s+\'$plugin\'.*"
         val pattern: Pattern = Pattern.compile(regex, Pattern.DOTALL)
@@ -219,7 +220,7 @@ public open class GradleLoader(project: GradleProject): DependenciesLoader<Gradl
         }
     }
 
-    public fun getProcessBuilder(command: String): ProcessBuilder {
+    fun getProcessBuilder(command: String): ProcessBuilder {
         val builder: ProcessBuilder
         val gradlew = File(project.root.path + "/gradlew")
         if (gradlew.exists()) {
@@ -239,7 +240,7 @@ public open class GradleLoader(project: GradleProject): DependenciesLoader<Gradl
         return builder
     }
 
-    public fun jarProjects() {
+    fun jarProjects() {
         try {
             val build = File(project.root.path + "/build.gradle")
 

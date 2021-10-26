@@ -19,7 +19,7 @@ import org.codeontology.extraction.Entity
 import org.codeontology.extraction.declaration.TypeEntity
 import spoon.reflect.declaration.CtTypedElement
 
-public interface TypedElementEntity<T: CtTypedElement<*>>: Entity<T> {
+interface TypedElementEntity<T: CtTypedElement<*>>: Entity<T> {
     fun getJavaType(): TypeEntity<*>?
 
     fun tagJavaType()

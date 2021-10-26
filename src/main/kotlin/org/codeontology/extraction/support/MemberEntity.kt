@@ -18,7 +18,7 @@ package org.codeontology.extraction.support
 import org.codeontology.extraction.Entity
 import spoon.reflect.declaration.CtNamedElement
 
-public interface MemberEntity<T: CtNamedElement>: Entity<T> {
+interface MemberEntity<T: CtNamedElement>: Entity<T> {
     fun getDeclaringElement(): Entity<*>?
 
     fun tagDeclaringElement()

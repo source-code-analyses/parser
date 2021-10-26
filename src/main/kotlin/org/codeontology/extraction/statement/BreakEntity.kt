@@ -21,21 +21,21 @@ import org.codeontology.extraction.support.FlowBreakerEntity
 import org.codeontology.extraction.support.TargetedLabelTagger
 import spoon.reflect.code.CtBreak
 
-public class BreakEntity(element: CtBreak): StatementEntity<CtBreak>(element), FlowBreakerEntity<CtBreak> {
-    protected override fun getType(): RDFNode {
+class BreakEntity(element: CtBreak): StatementEntity<CtBreak>(element), FlowBreakerEntity<CtBreak> {
+    override fun getType(): RDFNode {
         return Ontology.BREAK_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagTargetedLabel()
     }
 
-    public override fun tagTargetedLabel() {
+    override fun tagTargetedLabel() {
         TargetedLabelTagger(this).tagTargetedLabel()
     }
 
-    public override fun getTargetedLabel(): String {
+    override fun getTargetedLabel(): String {
         return element!!.targetLabel
     }
 }

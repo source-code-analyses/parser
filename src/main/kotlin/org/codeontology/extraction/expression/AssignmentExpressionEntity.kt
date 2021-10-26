@@ -17,41 +17,40 @@ package org.codeontology.extraction.expression
 
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
-import org.codeontology.extraction.Entity
 import org.codeontology.extraction.support.ExpressionHolderEntity
 import org.codeontology.extraction.support.ExpressionTagger
 import spoon.reflect.code.CtAssignment
 
-public class AssignmentExpressionEntity(expression: CtAssignment<*, *>): ExpressionEntity<CtAssignment<*, *>>(expression), ExpressionHolderEntity<CtAssignment<*, *>> {
-    public override fun extract() {
+class AssignmentExpressionEntity(expression: CtAssignment<*, *>): ExpressionEntity<CtAssignment<*, *>>(expression), ExpressionHolderEntity<CtAssignment<*, *>> {
+    override fun extract() {
         super.extract()
         tagLeftHandSideExpression()
         tagExpression()
     }
 
-    public fun tagLeftHandSideExpression() {
+    fun tagLeftHandSideExpression() {
         val expression: ExpressionEntity<*> = getLeftHandSideExpression()
         getLogger().addTriple(this, Ontology.LEFT_HAND_SIDE_PROPERTY, expression)
         expression.extract()
     }
 
-    public fun getLeftHandSideExpression(): ExpressionEntity<*> {
+    fun getLeftHandSideExpression(): ExpressionEntity<*> {
         val leftHandExpression: ExpressionEntity<*> = getFactory().wrap(element!!.assigned)
         leftHandExpression.parent = this
         return leftHandExpression
     }
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.ASSIGNMENT_EXPRESSION_ENTITY
     }
 
-    public override fun getExpression(): ExpressionEntity<*> {
+    override fun getExpression(): ExpressionEntity<*> {
         val expression: ExpressionEntity<*> = getFactory().wrap(element!!.assignment)
         expression.parent = this
         return expression
     }
 
-    public override fun tagExpression() {
+    override fun tagExpression() {
         ExpressionTagger(this).tagExpression()
     }
 }

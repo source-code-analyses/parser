@@ -15,40 +15,38 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.extraction.statement
 
-import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
-import org.codeontology.extraction.RDFLogger
 import org.codeontology.extraction.expression.ExpressionEntity
 import org.codeontology.extraction.support.ConditionHolderEntity
 import org.codeontology.extraction.support.ConditionTagger
 import spoon.reflect.code.CtIf
 import spoon.reflect.code.CtStatement
 
-public class IfThenElseEntity(element: CtIf):
+class IfThenElseEntity(element: CtIf):
     StatementEntity<CtIf>(element), ConditionHolderEntity<CtIf> {
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.IF_THEN_ELSE_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagCondition()
         tagThenStatement()
         tagElseStatement()
     }
 
-    public override fun getCondition(): ExpressionEntity<*> {
+    override fun getCondition(): ExpressionEntity<*> {
         val condition: ExpressionEntity<*> = getFactory().wrap(element!!.condition)
         condition.parent = this
         return condition
     }
 
-    public override fun tagCondition() {
+    override fun tagCondition() {
         ConditionTagger(this).tagCondition()
     }
 
-    public fun tagThenStatement() {
+    fun tagThenStatement() {
         val thenStatement: CtStatement = element!!.getThenStatement()
         val statement: StatementEntity<*> = getFactory().wrap(thenStatement)
         statement.parent = this
@@ -57,7 +55,7 @@ public class IfThenElseEntity(element: CtIf):
         statement.extract()
     }
 
-    public fun tagElseStatement() {
+    fun tagElseStatement() {
         val elseStatement: CtStatement? = element!!.getElseStatement()
         if (elseStatement != null) {
             val statement: StatementEntity<*> = getFactory().wrap(elseStatement)

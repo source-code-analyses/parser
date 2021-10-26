@@ -25,24 +25,24 @@ import spoon.reflect.declaration.CtType
 import spoon.reflect.reference.CtPackageReference
 import spoon.reflect.reference.CtTypeReference
 
-public class PackageEntity: NamedElementEntity<CtPackage> {
-    public var types: ArrayList<TypeEntity<*>> = setTypes()
+class PackageEntity: NamedElementEntity<CtPackage> {
+    var types: ArrayList<TypeEntity<*>> = setTypes()
         private set
 
-    public constructor(pack: CtPackage): super(pack)
+    constructor(pack: CtPackage): super(pack)
 
-    public constructor(pack: CtPackageReference): super(pack)
+    constructor(pack: CtPackageReference): super(pack)
 
-    public override fun buildRelativeURI(): String {
+    override fun buildRelativeURI(): String {
         val relativeURI: String = getPackageName()
         return relativeURI.replace(" ", SEPARATOR)
     }
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.PACKAGE_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         val types: Collection<TypeEntity<*>> = types
 
         if (types.isEmpty()) {
@@ -60,13 +60,13 @@ public class PackageEntity: NamedElementEntity<CtPackage> {
         }
     }
 
-    public fun tagParent() {
+    fun tagParent() {
         if (CodeOntology.extractProjectStructure()) {
             getLogger().addTriple(this, Ontology.PROJECT_PROPERTY, parent!!)
         }
     }
 
-    public fun tagTypes() {
+    fun tagTypes() {
         for(type: TypeEntity<*> in types) {
             getLogger().addTriple(this, Ontology.IS_PACKAGE_OF_PROPERTY, type)
             getLogger().addTriple(type, Ontology.HAS_PACKAGE_PROPERTY, this)
@@ -95,7 +95,7 @@ public class PackageEntity: NamedElementEntity<CtPackage> {
         }
     }
 
-    public fun setTypes(types: List<Class<*>>) {
+    fun setTypes(types: List<Class<*>>) {
         this.types = ArrayList()
         for(type: Class<*> in types) {
             val reference: CtTypeReference<*> = ReflectionFactory.getInstance().createTypeReference(type)

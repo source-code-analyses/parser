@@ -12,7 +12,7 @@ import java.io.FileWriter
 import java.io.IOException
 import java.util.Scanner
 
-public open class GradleProject public constructor(projectDirectory: File) : Project(projectDirectory) {
+open class GradleProject(projectDirectory: File) : Project(projectDirectory) {
     companion object {
         @JvmStatic private val SUBPROJECTS_FILE_NAME: String = "subProjects${CodeOntology.SUFFIX}"
     }
@@ -27,7 +27,7 @@ public open class GradleProject public constructor(projectDirectory: File) : Pro
         setUp()
     }
 
-    protected final override fun findSubProjects(): Collection<Project> {
+    final override fun findSubProjects(): Collection<Project> {
         setUp()
         val subProjects: HashSet<File> = HashSet()
         val task: String = "subprojects {\n" +
@@ -46,7 +46,7 @@ public open class GradleProject public constructor(projectDirectory: File) : Pro
 
             loader.runTask("CodeOntologySub")
 
-            val subProjectsFile: File = File("${root}/$SUBPROJECTS_FILE_NAME")
+            val subProjectsFile = File("${root}/$SUBPROJECTS_FILE_NAME")
 
             val scanner = Scanner(subProjectsFile)
 
@@ -71,14 +71,14 @@ public open class GradleProject public constructor(projectDirectory: File) : Pro
         return initSubProjects(subProjects)
     }
 
-    protected override fun initSubProjects(files: Collection<File>): Collection<Project> {
+    override fun initSubProjects(files: Collection<File>): Collection<Project> {
         val result: Collection<Project> = super.initSubProjects(files)
         removeSubProjectsFile()
         return result
     }
 
     private fun removeSubProjectsFile() {
-        val subProjectsFile: File = File("$root/$SUBPROJECTS_FILE_NAME")
+        val subProjectsFile = File("$root/$SUBPROJECTS_FILE_NAME")
         if (!subProjectsFile.exists()) {
             return
         }
@@ -99,7 +99,7 @@ public open class GradleProject public constructor(projectDirectory: File) : Pro
         }
     }
 
-    protected fun backup() {
+    private fun backup() {
         val content: String = getBuildFileContent()
         val buildFile: File = getBuildFile()!!
         val backup = File(buildFile.path + CodeOntology.SUFFIX)
@@ -115,7 +115,7 @@ public open class GradleProject public constructor(projectDirectory: File) : Pro
         }
     }
 
-    public override fun getLoader(): DependenciesLoader<GradleProject> {
+    override fun getLoader(): DependenciesLoader<GradleProject> {
         return loader
     }
 
@@ -123,7 +123,7 @@ public open class GradleProject public constructor(projectDirectory: File) : Pro
         return buildFile
     }
 
-    public override fun accept(visitor: ProjectVisitor) {
+    override fun accept(visitor: ProjectVisitor) {
         visitor.visit(this)
     }
 }

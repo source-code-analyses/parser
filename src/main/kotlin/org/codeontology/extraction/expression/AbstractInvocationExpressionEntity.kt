@@ -22,14 +22,14 @@ import spoon.reflect.code.CtAbstractInvocation
 import spoon.reflect.code.CtExpression
 import spoon.reflect.reference.CtExecutableReference
 
-public abstract class AbstractInvocationExpressionEntity<T>(expression: T): ExpressionEntity<T>(expression) where T: CtAbstractInvocation<*>, T: CtExpression<*> {
-    public override fun extract() {
+abstract class AbstractInvocationExpressionEntity<T>(expression: T): ExpressionEntity<T>(expression) where T: CtAbstractInvocation<*>, T: CtExpression<*> {
+    override fun extract() {
         super.extract()
         tagExecutable()
         tagArguments()
     }
 
-    public fun tagExecutable() {
+    fun tagExecutable() {
         val executable: ExecutableEntity<*>? = getExecutable()
         if (executable != null) {
             getLogger().addTriple(this, Ontology.INVOKES_PROPERTY, executable)
@@ -37,7 +37,7 @@ public abstract class AbstractInvocationExpressionEntity<T>(expression: T): Expr
         }
     }
 
-    public fun tagArguments() {
+    fun tagArguments() {
         val arguments: List<ActualArgumentEntity> = getArguments()
         for(argument: ActualArgumentEntity in arguments) {
             getLogger().addTriple(this, Ontology.ARGUMENT_PROPERTY, argument)
@@ -45,7 +45,7 @@ public abstract class AbstractInvocationExpressionEntity<T>(expression: T): Expr
         }
     }
 
-    public fun getExecutable(): ExecutableEntity<*>? {
+    fun getExecutable(): ExecutableEntity<*>? {
         val reference: CtExecutableReference<*>? = element?.executable
         if (reference != null) {
             val executable: ExecutableEntity<*> = getFactory().wrap(reference)
@@ -57,7 +57,7 @@ public abstract class AbstractInvocationExpressionEntity<T>(expression: T): Expr
         return null
     }
 
-    public fun getArguments(): List<ActualArgumentEntity> {
+    fun getArguments(): List<ActualArgumentEntity> {
         val expressions: List<CtExpression<*>>? = element?.arguments
         val arguments: ArrayList<ActualArgumentEntity> = ArrayList()
 

@@ -24,7 +24,7 @@ import spoon.reflect.reference.CtTypeParameterReference
 import spoon.reflect.reference.CtTypeReference
 import spoon.support.SpoonClassNotFoundException
 
-public enum class TypeKind {
+enum class TypeKind {
     CLASS,
     INTERFACE,
     ANNOTATION,
@@ -35,7 +35,8 @@ public enum class TypeKind {
     PARAMETERIZED_TYPE;
 
     companion object {
-         @JvmStatic public fun getKindOf(reference: CtTypeReference<*>): TypeKind? {
+         @JvmStatic
+         fun getKindOf(reference: CtTypeReference<*>): TypeKind? {
             if (reference is CtArrayTypeReference<*>) {
                 return ARRAY
             }
@@ -72,7 +73,8 @@ public enum class TypeKind {
             }
         }
 
-        @JvmStatic public fun getKindOf(type: CtType<*>): TypeKind {
+        @JvmStatic
+        fun getKindOf(type: CtType<*>): TypeKind {
             return if (type.reference is CtArrayTypeReference) {
                 ARRAY
             } else if (type.reference.actualTypeArguments.size > 0) {

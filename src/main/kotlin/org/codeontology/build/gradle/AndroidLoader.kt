@@ -9,8 +9,8 @@ import java.util.Scanner
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-public class AndroidLoader(project: AndroidProject): GradleLoader(project) {
-    public override fun loadDependencies() {
+class AndroidLoader(project: AndroidProject): GradleLoader(project) {
+    override fun loadDependencies() {
         println("Loading dependencies for Android project...")
         addClasspathTask()
         build()
@@ -30,7 +30,7 @@ public class AndroidLoader(project: AndroidProject): GradleLoader(project) {
         }
     }
 
-    protected fun addClasspathTask() {
+    private fun addClasspathTask() {
         val name = "CodeOntologyCpFile"
         var variants: String? = null
         if (hasPlugin("com.android.application")) {

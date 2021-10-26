@@ -15,24 +15,21 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.extraction.statement
 
-import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
 import org.codeontology.extraction.CodeElementEntity
-import org.codeontology.extraction.Entity
-import org.codeontology.extraction.RDFLogger
 import org.codeontology.extraction.support.LineTagger
 import org.codeontology.extraction.support.StatementsHolderEntity
 import org.codeontology.extraction.support.StatementsTagger
 import spoon.reflect.code.CtBlock
 
-public class FinallyEntity(block: CtBlock<*>):
+class FinallyEntity(block: CtBlock<*>):
     CodeElementEntity<CtBlock<*>>(block), StatementsHolderEntity<CtBlock<*>> {
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.FINALLY_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagStatements()
         tagSourceCode()
@@ -40,19 +37,19 @@ public class FinallyEntity(block: CtBlock<*>):
         tagEndLine()
     }
 
-    public fun tagLine() {
+    fun tagLine() {
         LineTagger(this).tagLine()
     }
 
-    public override fun getStatements(): List<StatementEntity<*>> {
+    override fun getStatements(): List<StatementEntity<*>> {
         return StatementsTagger(this).asEntities(element!!.statements)
     }
 
-    public override fun tagStatements() {
+    override fun tagStatements() {
         StatementsTagger(this).tagStatements()
     }
 
-    public fun tagEndLine() {
+    fun tagEndLine() {
         LineTagger(this).tagEndLine()
     }
 }

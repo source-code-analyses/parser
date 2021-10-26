@@ -23,11 +23,11 @@ import java.io.OutputStream
 import java.io.PrintStream
 import java.util.jar.JarFile
 
-public class JarProcessor {
+class JarProcessor {
     private lateinit var jarFile: JarFile
     private lateinit var systemErr: PrintStream
 
-    public constructor(path: String) {
+    constructor(path: String) {
         try {
             if(File(path).exists()) {
                 this.jarFile = JarFile(path)
@@ -35,15 +35,15 @@ public class JarProcessor {
                 systemErr = System.err
             }
         } catch (e: Exception) {
-            CodeOntology.showWarning("Could not access file " + path)
+            CodeOntology.showWarning("Could not access file $path")
         } catch (e: Error) {
-            CodeOntology.showWarning("Could not access file " + path)
+            CodeOntology.showWarning("Could not access file $path")
         }
     }
 
-    public constructor(jar: File): this(jar.path)
+    constructor(jar: File): this(jar.path)
 
-    public fun process() {
+    fun process() {
         try {
             try {
                 hideMessages()

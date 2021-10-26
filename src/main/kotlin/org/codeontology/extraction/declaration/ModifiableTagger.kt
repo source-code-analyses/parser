@@ -20,8 +20,8 @@ import org.codeontology.extraction.RDFLogger
 import org.codeontology.extraction.support.ModifiableEntity
 import org.codeontology.extraction.support.Modifier
 
-public class ModifiableTagger(private val modifiable: ModifiableEntity<*>) {
-    public fun tagModifiers() {
+class ModifiableTagger(private val modifiable: ModifiableEntity<*>) {
+    fun tagModifiers() {
         val modifiers: List<Modifier> = modifiable.getModifiers()
 
         for(modifier: Modifier in modifiers) {

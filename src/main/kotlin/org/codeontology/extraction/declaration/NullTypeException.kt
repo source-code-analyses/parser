@@ -15,4 +15,4 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.extraction.declaration
 
-public class NullTypeException: RuntimeException()
+class NullTypeException: RuntimeException()

@@ -16,22 +16,20 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 package org.codeontology.extraction.statement
 
 
-import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
-import org.codeontology.extraction.RDFLogger
 import org.codeontology.extraction.declaration.LocalVariableEntity
 import org.codeontology.extraction.support.BodyHolderEntity
 import org.codeontology.extraction.support.BodyTagger
 import spoon.reflect.code.*
 
-public class TryEntity(element: CtTry):
+class TryEntity(element: CtTry):
     StatementEntity<CtTry>(element), BodyHolderEntity<CtTry> {
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.TRY_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagBody()
         tagCatches()
@@ -39,7 +37,7 @@ public class TryEntity(element: CtTry):
         tagResources()
     }
 
-    public fun tagCatches() {
+    fun tagCatches() {
         val iterator: Iterator<CatchEntity> = getCatches().iterator()
 
         if (!iterator.hasNext()) {
@@ -61,7 +59,7 @@ public class TryEntity(element: CtTry):
         }
     }
 
-    public fun tagFinally() {
+    fun tagFinally() {
         val finallyBlock: FinallyEntity? = getFinally()
         if (finallyBlock != null) {
             getLogger().addTriple(this, Ontology.FINALLY_CLAUSE_PROPERTY, finallyBlock)
@@ -83,7 +81,7 @@ public class TryEntity(element: CtTry):
         return catches
     }
 
-    public fun tagResources() {
+    fun tagResources() {
         val resources: List<LocalVariableEntity> = getResources()
         for (resource: LocalVariableEntity in resources) {
             getLogger().addTriple(this, Ontology.RESOURCE_PROPERTY, resource)
@@ -91,7 +89,7 @@ public class TryEntity(element: CtTry):
         }
     }
 
-    public fun getResources(): List<LocalVariableEntity> {
+    fun getResources(): List<LocalVariableEntity> {
         val result: ArrayList<LocalVariableEntity> = ArrayList()
 
         if (element is CtTryWithResource) {
@@ -109,7 +107,7 @@ public class TryEntity(element: CtTry):
         return result
     }
 
-    public fun getFinally(): FinallyEntity? {
+    fun getFinally(): FinallyEntity? {
         val block: CtBlock<*>? = element?.finalizer
         if (block != null) {
             val finallyBlock = FinallyEntity(block)
@@ -120,14 +118,14 @@ public class TryEntity(element: CtTry):
         return null
     }
 
-    public override fun getBody(): StatementEntity<*> {
+    override fun getBody(): StatementEntity<*> {
         val body: StatementEntity<*> = getFactory().wrap(element!!.body)
         body.position = 0
         body.parent = this
         return body
     }
 
-    public override fun tagBody() {
+    override fun tagBody() {
         BodyTagger(this).tagBody()
     }
 }

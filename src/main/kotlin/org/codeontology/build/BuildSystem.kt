@@ -20,13 +20,14 @@ import org.apache.commons.io.filefilter.FileFilterUtils
 
 import java.io.File
 
-public enum class BuildSystem {
+enum class BuildSystem {
     GRADLE,
     MAVEN,
     UNKNOWN;
 
     companion object {
-        @JvmStatic public fun getBuildSystem(project: File): BuildSystem {
+        @JvmStatic
+        fun getBuildSystem(project: File): BuildSystem {
             if (!project.isDirectory) {
                 return UNKNOWN
             }

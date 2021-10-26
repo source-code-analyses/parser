@@ -6,12 +6,13 @@ import org.codeontology.extraction.Entity
 import org.codeontology.extraction.NamedElementEntity
 import spoon.reflect.code.CtLambda
 
-public class LambdaEntity(lambda: CtLambda<*>): NamedElementEntity<CtLambda<*>>(lambda) {
+class LambdaEntity(lambda: CtLambda<*>): NamedElementEntity<CtLambda<*>>(lambda) {
     companion object {
-        @JvmStatic public val TAG: String = "lambda"
+        @JvmStatic
+        val TAG: String = "lambda"
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagSourceCode()
         tagFunctionalImplements()
@@ -24,11 +25,11 @@ public class LambdaEntity(lambda: CtLambda<*>): NamedElementEntity<CtLambda<*>>(
         implementedType.follow()
     }
 
-    public override fun buildRelativeURI(): String {
+    override fun buildRelativeURI(): String {
         return parent!!.getRelativeURI() + SEPARATOR + TAG + SEPARATOR + element?.simpleName
     }
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.LAMBDA_ENTITY
     }
 }

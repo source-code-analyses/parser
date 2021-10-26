@@ -18,18 +18,17 @@ package org.codeontology.extraction.declaration
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.CodeOntology
 import org.codeontology.Ontology
-import org.codeontology.extraction.Entity
 import org.codeontology.extraction.support.FormalTypeParametersTagger
 import org.codeontology.extraction.support.GenericDeclarationEntity
 import spoon.reflect.declaration.CtInterface
 import spoon.reflect.reference.CtTypeReference
 
-public class InterfaceEntity(interfaceReference: CtTypeReference<*>): TypeEntity<CtInterface<*>>(interfaceReference), GenericDeclarationEntity<CtInterface<*>> {
-    protected override fun getType(): RDFNode {
+class InterfaceEntity(interfaceReference: CtTypeReference<*>): TypeEntity<CtInterface<*>>(interfaceReference), GenericDeclarationEntity<CtInterface<*>> {
+    override fun getType(): RDFNode {
         return Ontology.INTERFACE_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagName()
         tagLabel()
@@ -47,15 +46,15 @@ public class InterfaceEntity(interfaceReference: CtTypeReference<*>): TypeEntity
         }
     }
 
-    public fun tagSuperInterfaces() {
+    fun tagSuperInterfaces() {
         tagSuperInterfaces(Ontology.EXTENDS_PROPERTY)
     }
 
-    public override fun getFormalTypeParameters(): List<TypeVariableEntity> {
+    override fun getFormalTypeParameters(): List<TypeVariableEntity> {
         return FormalTypeParametersTagger.formalTypeParametersOf(this)
     }
 
-    public override fun tagFormalTypeParameters() {
+    override fun tagFormalTypeParameters() {
         FormalTypeParametersTagger(this).tagFormalTypeParameters()
     }
 }

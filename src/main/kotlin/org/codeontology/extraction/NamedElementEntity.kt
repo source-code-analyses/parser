@@ -21,9 +21,9 @@ import org.codeontology.Ontology
 import spoon.reflect.declaration.CtNamedElement
 import spoon.reflect.reference.CtReference
 
-public abstract class NamedElementEntity<E: CtNamedElement>: CodeElementEntity<E> {
+abstract class NamedElementEntity<E: CtNamedElement>: CodeElementEntity<E> {
     public final override var element: E? = null
-        protected set(value) {
+        set(value) {
             if (value == null) {
                 throw IllegalArgumentException()
             }
@@ -37,7 +37,7 @@ public abstract class NamedElementEntity<E: CtNamedElement>: CodeElementEntity<E
             }
         }
 
-    public var reference: CtReference? = null
+    var reference: CtReference? = null
         private set(value) {
             field = value
             if (reference?.declaration != null && element == null) {
@@ -53,22 +53,22 @@ public abstract class NamedElementEntity<E: CtNamedElement>: CodeElementEntity<E
         this.reference = reference
     }
 
-    public open fun getName(): String {
+    open fun getName(): String {
         return reference?.simpleName ?: ""
     }
 
-    public fun tagName() {
+    fun tagName() {
         val name: Literal = model.createTypedLiteral(getName())
         getLogger().addTriple(this, Ontology.NAME_PROPERTY, name)
     }
 
-    public fun tagLabel() {
+    fun tagLabel() {
         val labelString: String = splitCamelCase(getName())
         val label: Literal = model.createTypedLiteral(labelString)
         getLogger().addTriple(this, Ontology.RDFS_LABEL_PROPERTY, label)
     }
 
-    public fun splitCamelCase(s: String): String {
+    fun splitCamelCase(s: String): String {
         return s.replace(
             String.format("%s|%s|%s",
                 "(?<=[A-Z])(?=[A-Z][a-z])",
@@ -78,14 +78,14 @@ public abstract class NamedElementEntity<E: CtNamedElement>: CodeElementEntity<E
         )
     }
 
-    public override fun follow() {
+    override fun follow() {
         if (!isDeclarationAvailable() && !CodeOntology.isJarExplorationEnabled()
                 && EntityRegister.getInstance().add(this)) {
             extract()
         }
     }
 
-    public open fun isDeclarationAvailable(): Boolean {
+    open fun isDeclarationAvailable(): Boolean {
         return element != null
     }
 }

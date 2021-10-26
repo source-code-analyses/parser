@@ -19,8 +19,8 @@ import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
 import spoon.reflect.reference.CtTypeReference
 
-public class EnumEntity<T: Enum<*>>(reference: CtTypeReference<*>): ClassEntity<T>(reference) {
-    protected override fun getType(): RDFNode {
+class EnumEntity<T: Enum<*>>(reference: CtTypeReference<*>): ClassEntity<T>(reference) {
+    override fun getType(): RDFNode {
         return Ontology.ENUM_ENTITY
     }
 }

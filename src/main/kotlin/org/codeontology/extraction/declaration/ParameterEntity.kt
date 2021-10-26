@@ -21,34 +21,32 @@ import org.codeontology.Ontology
 import org.codeontology.docparser.DocCommentParser
 import org.codeontology.docparser.ParamTag
 import org.codeontology.docparser.Tag
-import org.codeontology.extraction.Entity
 import org.codeontology.extraction.NamedElementEntity
 import org.codeontology.extraction.support.JavaTypeTagger
 import org.codeontology.extraction.support.TypedElementEntity
-import spoon.reflect.declaration.CtExecutable
 import spoon.reflect.declaration.CtParameter
 import spoon.reflect.reference.CtTypeReference
 
-public class ParameterEntity: NamedElementEntity<CtParameter<*>>, TypedElementEntity<CtParameter<*>> {
-    public var position: Int = 0
+class ParameterEntity: NamedElementEntity<CtParameter<*>>, TypedElementEntity<CtParameter<*>> {
+    var position: Int = 0
     private var parameterAvailable: Boolean = true
 
     companion object {
         @JvmStatic private val TAG: String = "parameter"
     }
 
-    public constructor(parameter: CtParameter<*>): super(parameter) {
+    constructor(parameter: CtParameter<*>): super(parameter) {
         parameterAvailable = true
     }
 
-    public constructor(reference: CtTypeReference<*>): super(reference) {
+    constructor(reference: CtTypeReference<*>): super(reference) {
         parameterAvailable = false
         if (reference.qualifiedName.equals(CtTypeReference.NULL_TYPE_NAME)) {
             throw NullTypeException()
         }
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagJavaType()
         tagPosition()
@@ -60,19 +58,19 @@ public class ParameterEntity: NamedElementEntity<CtParameter<*>>, TypedElementEn
         }
     }
 
-    public override fun buildRelativeURI(): String {
+    override fun buildRelativeURI(): String {
         return parent!!.getRelativeURI() + SEPARATOR + TAG + SEPARATOR + position
     }
 
-    public fun tagPosition() {
+    fun tagPosition() {
         getLogger().addTriple(this, Ontology.POSITION_PROPERTY, model.createTypedLiteral(position))
     }
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.PARAMETER_ENTITY
     }
 
-    public override fun getJavaType(): TypeEntity<*> {
+    override fun getJavaType(): TypeEntity<*> {
         val type: TypeEntity<*>? = if (isDeclarationAvailable()) {
             getFactory().wrap(element!!.type)
         } else {
@@ -82,15 +80,15 @@ public class ParameterEntity: NamedElementEntity<CtParameter<*>>, TypedElementEn
         return type
     }
 
-    public override fun tagJavaType() {
+    override fun tagJavaType() {
         JavaTypeTagger(this).tagJavaType()
     }
 
-    public override fun isDeclarationAvailable(): Boolean {
+    override fun isDeclarationAvailable(): Boolean {
         return parameterAvailable
     }
 
-    public override fun tagComment() {
+    override fun tagComment() {
         if(!(parent as ExecutableEntity<*>).isDeclarationAvailable()) {
             return
         }

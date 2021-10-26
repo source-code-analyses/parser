@@ -18,10 +18,9 @@ package org.codeontology.extraction.project
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
 import org.codeontology.build.gradle.GradleProject
-import org.codeontology.extraction.Entity
 
-public class GradleProjectEntity(project: GradleProject): ProjectEntity<GradleProject>(project) {
-    protected override fun getType(): RDFNode {
+class GradleProjectEntity(project: GradleProject): ProjectEntity<GradleProject>(project) {
+    override fun getType(): RDFNode {
         return Ontology.GRADLE_PROJECT_ENTITY
     }
 }

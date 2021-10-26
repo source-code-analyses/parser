@@ -15,13 +15,13 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.docparser
 
-public open class Tag(name: String, text: String) {
-    public var text: String = text
+open class Tag(name: String, text: String) {
+    var text: String = text
         private set(text) {field = text.trim().replace("\\s+".toRegex(), " ")}
-    public var name: String = name
+    var name: String = name
         private set(name) {field = name.trim()}
 
-    public override fun toString(): String {
+    override fun toString(): String {
         return "$name $text"
     }
 

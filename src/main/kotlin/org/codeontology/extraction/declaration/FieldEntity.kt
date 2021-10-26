@@ -33,20 +33,20 @@ import java.lang.reflect.GenericArrayType
 import java.lang.reflect.Type
 import java.lang.reflect.TypeVariable
 
-public class FieldEntity: NamedElementEntity<CtField<*>>, ModifiableEntity<CtField<*>>, MemberEntity<CtField<*>>, TypedElementEntity<CtField<*>> {
-    public constructor(field: CtField<*>): super(field)
+class FieldEntity: NamedElementEntity<CtField<*>>, ModifiableEntity<CtField<*>>, MemberEntity<CtField<*>>, TypedElementEntity<CtField<*>> {
+    constructor(field: CtField<*>): super(field)
 
-    public constructor(field: CtFieldReference<*>): super(field)
+    constructor(field: CtFieldReference<*>): super(field)
 
-    public override fun buildRelativeURI(): String {
+    override fun buildRelativeURI(): String {
         return getDeclaringElement()!!.getRelativeURI() + SEPARATOR + (reference?.simpleName ?: "")
     }
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.FIELD_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagName()
         tagLabel()
         tagType()
@@ -63,7 +63,7 @@ public class FieldEntity: NamedElementEntity<CtField<*>>, ModifiableEntity<CtFie
         }
     }
 
-    public override fun getModifiers(): List<Modifier> {
+    override fun getModifiers(): List<Modifier> {
         if (isDeclarationAvailable()) {
             return Modifier.asList(element?.modifiers ?: HashSet())
         }
@@ -76,23 +76,27 @@ public class FieldEntity: NamedElementEntity<CtField<*>>, ModifiableEntity<CtFie
         }
     }
 
-    public override fun tagModifiers() {
+    override fun tagModifiers() {
         ModifiableTagger(this).tagModifiers()
     }
 
-    public override fun getJavaType(): TypeEntity<*> {
+    override fun getJavaType(): TypeEntity<*>? {
         var type: TypeEntity<*>?
         if (isDeclarationAvailable()) {
             type = getFactory().wrap(element!!.type)
         } else {
             type = getGenericType()
             if (type == null) {
-                val typeReference: CtTypeReference<*> = (reference as CtFieldReference<*>).type
+                val typeReference: CtTypeReference<*>? = (reference as CtFieldReference<*>).type
                 type = getFactory().wrap(typeReference)
             }
         }
 
-        type!!.parent = getDeclaringElement()!!
+        if (type == null) {
+           return null
+        }
+
+        type.parent = getDeclaringElement()
         return type
     }
 
@@ -117,11 +121,11 @@ public class FieldEntity: NamedElementEntity<CtField<*>>, ModifiableEntity<CtFie
         return result
     }
 
-    public override fun tagJavaType() {
+    override fun tagJavaType() {
         JavaTypeTagger(this).tagJavaType()
     }
 
-    public override fun getDeclaringElement(): Entity<*>? {
+    override fun getDeclaringElement(): Entity<*>? {
         return if(isDeclarationAvailable()) {
             getFactory().wrap(element!!.declaringType)
         } else {
@@ -132,11 +136,11 @@ public class FieldEntity: NamedElementEntity<CtField<*>>, ModifiableEntity<CtFie
         }
     }
 
-    public override fun tagDeclaringElement() {
+    override fun tagDeclaringElement() {
         DeclaringElementTagger(this).tagDeclaredBy()
     }
 
-    public fun tagDeclaration() {
+    private fun tagDeclaration() {
         val declaration = FieldDeclaration(element!!)
         declaration.parent = this
         declaration.extract()

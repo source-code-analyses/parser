@@ -15,26 +15,24 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.extraction.declaration
 
-import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
 import org.codeontology.extraction.Entity
-import org.codeontology.extraction.RDFLogger
 import spoon.reflect.declaration.CtType
 import spoon.reflect.reference.CtArrayTypeReference
 import spoon.reflect.reference.CtTypeReference
 
-public class ArrayEntity(reference: CtTypeReference<*>):
+class ArrayEntity(reference: CtTypeReference<*>):
     TypeEntity<CtType<*>>(reference) {
     private val componentType: TypeEntity<*> = getFactory().wrap((getReference() as CtArrayTypeReference<*>).arrayType)!!
-    public override var parent: Entity<*>? = super.parent
+    override var parent: Entity<*>? = super.parent
         get() = super.parent
         set(value) {
             field = value
             componentType.parent = value
         }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagName()
         tagLabel()
@@ -42,25 +40,25 @@ public class ArrayEntity(reference: CtTypeReference<*>):
         tagDimensions()
     }
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.ARRAY_ENTITY
     }
 
-    public override fun buildRelativeURI(): String {
+    override fun buildRelativeURI(): String {
         return componentType.getRelativeURI() + "[]"
     }
 
-    public fun tagArrayOf() {
+    fun tagArrayOf() {
         getLogger().addTriple(this, Ontology.ARRAY_OF_PROPERTY, componentType)
         componentType.follow()
     }
 
-    public fun tagDimensions() {
+    fun tagDimensions() {
         val dimensions: Int = (getReference() as CtArrayTypeReference<*>).dimensionCount
         getLogger().addTriple(this, Ontology.DIMENSIONS_PROPERTY, model.createTypedLiteral(dimensions))
     }
 
-    public override fun getName(): String {
+    override fun getName(): String {
         var componenTypeName: String = componentType.buildRelativeURI()
         if (componentType is PrimitiveTypeEntity) {
             componenTypeName = componenTypeName.lowercase()

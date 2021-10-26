@@ -15,13 +15,14 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.docparser
 
-public class ParamTag(text: String): Tag(TAG, text) {
-    public var parameterName: String
+class ParamTag(text: String): Tag(TAG, text) {
+    var parameterName: String
         private set
-    public var parameterComment: String
+    var parameterComment: String
         private set
     companion object {
-        @JvmStatic public final val TAG = "@param"
+        @JvmStatic
+        val TAG = "@param"
     }
 
     init {

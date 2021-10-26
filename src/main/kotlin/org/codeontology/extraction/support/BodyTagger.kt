@@ -18,8 +18,8 @@ package org.codeontology.extraction.support
 import org.codeontology.Ontology
 import org.codeontology.extraction.RDFLogger
 
-public class BodyTagger(val entity: BodyHolderEntity<*>) {
-    public fun tagBody() {
+class BodyTagger(val entity: BodyHolderEntity<*>) {
+    fun tagBody() {
         val body = entity.getBody()
 
         RDFLogger.getInstance().addTriple(entity, Ontology.BODY_PROPERTY, body!!)

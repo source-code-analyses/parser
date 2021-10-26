@@ -10,7 +10,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.util.Scanner
 
-public class MavenProject public constructor(project: File) : Project(project) {
+class MavenProject(project: File) : Project(project) {
     private lateinit var mavenProject: ApacheMaven
     private var buildFile: File? = null
     private lateinit var loader: MavenLoader
@@ -22,7 +22,6 @@ public class MavenProject public constructor(project: File) : Project(project) {
             }
             return mavenProject.basedir
         }
-        protected set
 
     init {
         subProjects = findSubProjects()
@@ -39,7 +38,7 @@ public class MavenProject public constructor(project: File) : Project(project) {
         }
     }
 
-    protected override fun findSubProjects(): Collection<Project> {
+    override fun findSubProjects(): Collection<Project> {
         setUp()
         try {
             val modules: HashSet<File> = HashSet()
@@ -69,15 +68,15 @@ public class MavenProject public constructor(project: File) : Project(project) {
         }
     }
 
-    public override fun getLoader(): DependenciesLoader<MavenProject> {
+    override fun getLoader(): DependenciesLoader<MavenProject> {
         return loader
     }
 
-    public override fun accept(visitor: ProjectVisitor) {
+    override fun accept(visitor: ProjectVisitor) {
         visitor.visit(this)
     }
 
-    public override fun getBuildFile(): File? {
+    override fun getBuildFile(): File? {
         return buildFile
     }
 }

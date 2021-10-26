@@ -19,24 +19,24 @@ import org.codeontology.extraction.project.ProjectVisitor
 
 import java.io.File
 
-public class DefaultProject public constructor(projectDirectory: File): Project(projectDirectory) {
+class DefaultProject(projectDirectory: File): Project(projectDirectory) {
     init {
         subProjects = findSubProjects()
     }
 
-    protected override fun findSubProjects(): Collection<Project> {
+    override fun findSubProjects(): Collection<Project> {
         return ArrayList()
     }
 
-    public override fun getBuildFile(): File? {
+    override fun getBuildFile(): File? {
         return null
     }
 
-    public override fun getLoader(): DependenciesLoader<DefaultProject> {
+    override fun getLoader(): DependenciesLoader<DefaultProject> {
         return DefaultLoader(this)
     }
 
-    public override fun accept(visitor: ProjectVisitor) {
+    override fun accept(visitor: ProjectVisitor) {
         visitor.visit(this)
     }
 }

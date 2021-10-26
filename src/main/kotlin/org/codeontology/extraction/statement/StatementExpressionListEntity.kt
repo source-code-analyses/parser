@@ -15,16 +15,14 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.extraction.statement
 
-import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
 import org.codeontology.extraction.AbstractEntity
 import org.codeontology.extraction.Entity
-import org.codeontology.extraction.RDFLogger
 
-public class StatementExpressionListEntity public constructor(list: List<Entity<*>>):
+class StatementExpressionListEntity(list: List<Entity<*>>):
     AbstractEntity<List<Entity<*>>>(list) {
-    public var position: Int = 0
+    var position: Int = 0
 
     companion object {
         @JvmStatic private val TAG = "statement-expression-list"
@@ -36,20 +34,20 @@ public class StatementExpressionListEntity public constructor(list: List<Entity<
         }
     }
 
-    protected override fun buildRelativeURI(): String {
+    override fun buildRelativeURI(): String {
         return "${parent?.getRelativeURI()}$SEPARATOR$TAG$SEPARATOR$position"
     }
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.STATEMENT_EXPRESSION_LIST_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagSourceCode()
     }
 
-    public override fun getSourceCode(): String {
+    override fun getSourceCode(): String {
         val list: List<Entity<*>> = element ?: ArrayList()
         val size: Int = list.size
         val builder: StringBuilder = StringBuilder()

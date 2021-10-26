@@ -23,31 +23,31 @@ import org.codeontology.extraction.support.ExpressionTagger
 import spoon.reflect.code.CtAssert
 import spoon.reflect.code.CtExpression
 
-public class AssertEntity(element: CtAssert<*>): StatementEntity<CtAssert<*>>(element), ExpressionHolderEntity<CtAssert<*>> {
-    protected override fun getType(): RDFNode {
+class AssertEntity(element: CtAssert<*>): StatementEntity<CtAssert<*>>(element), ExpressionHolderEntity<CtAssert<*>> {
+    override fun getType(): RDFNode {
         return Ontology.ASSERT_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagExpression()
         tagAssertExpression()
     }
 
-    public fun getAssertExpression(): ExpressionEntity<*> {
+    fun getAssertExpression(): ExpressionEntity<*> {
         val expression: CtExpression<Boolean> = element!!.assertExpression
         val entity: ExpressionEntity<*> = getFactory().wrap(expression)
         entity.parent = this
         return entity
     }
 
-    public fun tagAssertExpression() {
+    fun tagAssertExpression() {
         val assertExpression: ExpressionEntity<*> = getAssertExpression()
         getLogger().addTriple(this, Ontology.ASSERT_EXPRESSION_PROPERTY, assertExpression)
         assertExpression.extract()
     }
 
-    public override fun getExpression(): ExpressionEntity<*>? {
+    override fun getExpression(): ExpressionEntity<*>? {
         val expression: CtExpression<*>? = element!!.expression
         if (expression != null) {
             val entity: ExpressionEntity<*> = getFactory().wrap(expression)
@@ -58,7 +58,7 @@ public class AssertEntity(element: CtAssert<*>): StatementEntity<CtAssert<*>>(el
         return null
     }
 
-    public override fun tagExpression() {
+    override fun tagExpression() {
         ExpressionTagger(this).tagExpression()
     }
 }

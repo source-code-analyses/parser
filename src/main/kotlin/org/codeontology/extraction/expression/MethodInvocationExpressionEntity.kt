@@ -25,19 +25,19 @@ import spoon.reflect.code.CtInvocation
 import spoon.reflect.code.CtTypeAccess
 import spoon.reflect.reference.CtTypeReference
 
-public class MethodInvocationExpressionEntity(expression: CtInvocation<*>): AbstractInvocationExpressionEntity<CtInvocation<*>>(expression), ExpressionHolderEntity<CtInvocation<*>> {
-    protected override fun getType(): RDFNode {
+class MethodInvocationExpressionEntity(expression: CtInvocation<*>): AbstractInvocationExpressionEntity<CtInvocation<*>>(expression), ExpressionHolderEntity<CtInvocation<*>> {
+    override fun getType(): RDFNode {
         return Ontology.METHOD_INVOCATION_EXPRESSION_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagTarget()
         tagArguments()
         tagExecutable()
     }
 
-    public fun tagTarget() {
+    fun tagTarget() {
         val target: CtExpression<*>? = element?.target
 
         if (target !is CtTypeAccess<*>) {
@@ -53,7 +53,7 @@ public class MethodInvocationExpressionEntity(expression: CtInvocation<*>): Abst
         }
     }
 
-    public override fun getExpression(): ExpressionEntity<*>? {
+    override fun getExpression(): ExpressionEntity<*>? {
         val target: CtExpression<*>? = element?.target
         if (target != null) {
             val expression: ExpressionEntity<*> = getFactory().wrap(target)
@@ -63,7 +63,7 @@ public class MethodInvocationExpressionEntity(expression: CtInvocation<*>): Abst
         return null
     }
 
-    public override fun tagExpression() {
+    override fun tagExpression() {
         ExpressionTagger(this).tagExpression(Ontology.TARGET_PROPERTY)
     }
 }

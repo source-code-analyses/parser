@@ -15,12 +15,13 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.extraction
 
-public class EntityRegister {
+class EntityRegister {
     companion object {
         @JvmStatic private var instance: EntityRegister? = null
         @JvmStatic private val size: Int = 2048
         @JvmStatic private val load: Int = size / 2
-        @JvmStatic public fun getInstance(): EntityRegister {
+        @JvmStatic
+        fun getInstance(): EntityRegister {
             if(instance == null) {
                 instance = EntityRegister()
             }
@@ -32,7 +33,7 @@ public class EntityRegister {
     private var register = hashSetOf<String>()
     private var localSize: Int = 0
 
-    public fun add(entity: Entity<*>): Boolean {
+    fun add(entity: Entity<*>): Boolean {
         handleSize()
         return register.add(entity.getRelativeURI())
     }

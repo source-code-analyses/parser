@@ -25,28 +25,28 @@ import org.codeontology.extraction.support.ExpressionTagger
 import spoon.reflect.code.CtExpression
 import spoon.reflect.code.CtSynchronized
 
-public class SynchronizedEntity(element: CtSynchronized): StatementEntity<CtSynchronized>(element), BodyHolderEntity<CtSynchronized>, ExpressionHolderEntity<CtSynchronized> {
-    protected override fun getType(): RDFNode {
+class SynchronizedEntity(element: CtSynchronized): StatementEntity<CtSynchronized>(element), BodyHolderEntity<CtSynchronized>, ExpressionHolderEntity<CtSynchronized> {
+    override fun getType(): RDFNode {
         return Ontology.SYNCHRONIZED_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagBody()
         tagExpression()
     }
 
-    public override fun getBody(): StatementEntity<*> {
+    override fun getBody(): StatementEntity<*> {
         val body: StatementEntity<*> = getFactory().wrap(element!!.block)
         body.parent = this
         return body
     }
 
-    public override fun tagBody() {
+    override fun tagBody() {
         BodyTagger(this).tagBody()
     }
 
-    public override fun getExpression(): ExpressionEntity<*>? {
+    override fun getExpression(): ExpressionEntity<*>? {
         val expression: CtExpression<*>? = element?.expression
         if (expression != null) {
             val entity: ExpressionEntity<*> = getFactory().wrap(expression)
@@ -57,7 +57,7 @@ public class SynchronizedEntity(element: CtSynchronized): StatementEntity<CtSync
         return null
     }
 
-    public override fun tagExpression() {
+    override fun tagExpression() {
         ExpressionTagger(this).tagExpression()
     }
 }

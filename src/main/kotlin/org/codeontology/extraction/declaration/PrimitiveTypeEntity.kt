@@ -17,21 +17,20 @@ package org.codeontology.extraction.declaration
 
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
-import org.codeontology.extraction.Entity
 import spoon.reflect.declaration.CtType
 import spoon.reflect.reference.CtTypeReference
 
-public class PrimitiveTypeEntity(reference: CtTypeReference<*>): TypeEntity<CtType<*>>(reference) {
-    protected override fun getType(): RDFNode {
+class PrimitiveTypeEntity(reference: CtTypeReference<*>): TypeEntity<CtType<*>>(reference) {
+    override fun getType(): RDFNode {
         return Ontology.PRIMITIVE_ENTITY
     }
 
-    public override fun buildRelativeURI(): String {
+    override fun buildRelativeURI(): String {
         val uri: String =  super.buildRelativeURI()
         return uri.substring(0, 1).uppercase() + uri.substring(1)
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagName()
     }

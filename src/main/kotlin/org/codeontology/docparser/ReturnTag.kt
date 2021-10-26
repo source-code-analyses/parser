@@ -15,8 +15,9 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.docparser
 
-public class ReturnTag(text: String): Tag(TAG, text) {
+class ReturnTag(text: String): Tag(TAG, text) {
     companion object {
-        @JvmStatic public final val TAG: String = "@return"
+        @JvmStatic
+        val TAG: String = "@return"
     }
 }

@@ -17,7 +17,7 @@ package org.codeontology.extraction.support
 
 import org.codeontology.extraction.Entity
 
-public interface FlowBreakerEntity<E>: Entity<E> {
+interface FlowBreakerEntity<E>: Entity<E> {
     fun tagTargetedLabel()
 
     fun getTargetedLabel(): String

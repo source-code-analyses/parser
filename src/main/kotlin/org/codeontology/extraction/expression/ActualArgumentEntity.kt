@@ -19,12 +19,11 @@ import org.apache.jena.rdf.model.Literal
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
 import org.codeontology.extraction.AbstractEntity
-import org.codeontology.extraction.Entity
 import org.codeontology.extraction.support.ExpressionHolderEntity
 import org.codeontology.extraction.support.ExpressionTagger
 
-public class ActualArgumentEntity(expression: ExpressionEntity<*>): AbstractEntity<ExpressionEntity<*>>(expression), ExpressionHolderEntity<ExpressionEntity<*>> {
-    public var position: Int = 0
+class ActualArgumentEntity(expression: ExpressionEntity<*>): AbstractEntity<ExpressionEntity<*>>(expression), ExpressionHolderEntity<ExpressionEntity<*>> {
+    var position: Int = 0
 
     companion object {
         @JvmStatic private val TAG: String = "argument"
@@ -34,25 +33,25 @@ public class ActualArgumentEntity(expression: ExpressionEntity<*>): AbstractEnti
         return element!!.getRelativeURI() + SEPARATOR + TAG + SEPARATOR + position
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagPosition()
         tagExpression()
     }
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.ACTUAL_ARGUMENT_ENTITY
     }
 
-    public override fun getExpression(): ExpressionEntity<*>? {
+    override fun getExpression(): ExpressionEntity<*>? {
         return element
     }
 
-    public override fun tagExpression() {
+    override fun tagExpression() {
         ExpressionTagger(this).tagExpression()
     }
 
-    public fun tagPosition() {
+    fun tagPosition() {
         val position: Literal = model.createTypedLiteral(position)
         getLogger().addTriple(this, Ontology.POSITION_PROPERTY, position)
     }

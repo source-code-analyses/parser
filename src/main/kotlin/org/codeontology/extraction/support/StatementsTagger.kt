@@ -21,8 +21,8 @@ import org.codeontology.extraction.RDFLogger
 import org.codeontology.extraction.statement.StatementEntity
 import spoon.reflect.code.CtStatement
 
-public class StatementsTagger(private final val entity: StatementsHolderEntity<*>) {
-    public fun tagStatements() {
+class StatementsTagger(private val entity: StatementsHolderEntity<*>) {
+    fun tagStatements() {
         val statements = entity.getStatements()
         val iterator = statements.listIterator()
 
@@ -44,7 +44,7 @@ public class StatementsTagger(private final val entity: StatementsHolderEntity<*
         statement.extract()
     }
 
-    public fun asEntities(statements: List<CtStatement>): List<StatementEntity<*>> {
+    fun asEntities(statements: List<CtStatement>): List<StatementEntity<*>> {
         val result = ArrayList<StatementEntity<*>>()
 
         statements.forEachIndexed { i, item ->

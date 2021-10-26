@@ -16,7 +16,6 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 package org.codeontology.extraction.declaration
 
 import org.apache.jena.rdf.model.Literal
-import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.CodeOntology
 import org.codeontology.Ontology
@@ -30,22 +29,21 @@ import spoon.reflect.declaration.CtConstructor
 import spoon.reflect.declaration.CtType
 import spoon.reflect.reference.CtExecutableReference
 import spoon.reflect.reference.CtTypeReference
-
 import java.lang.reflect.Constructor
 
-public open class ClassEntity<T>: TypeEntity<CtClass<T>>, GenericDeclarationEntity<CtClass<T>> {
+open class ClassEntity<T>: TypeEntity<CtClass<T>>, GenericDeclarationEntity<CtClass<T>> {
     private var constructors: ArrayList<ConstructorEntity>? = null
     override val model = RDFLogger.getInstance().model
 
-    public constructor(clazz: CtClass<T>): super(clazz)
+    constructor(clazz: CtClass<T>): super(clazz)
 
-    public constructor(reference: CtTypeReference<*>): super(reference)
+    constructor(reference: CtTypeReference<*>): super(reference)
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.CLASS_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagSimpleName()
         tagCanonicalName()
@@ -78,7 +76,7 @@ public open class ClassEntity<T>: TypeEntity<CtClass<T>>, GenericDeclarationEnti
         getLogger().addTriple(this, Ontology.SIMPLE_NAME_PROPERTY, name)
     }
 
-    public fun tagSuperClass() {
+    fun tagSuperClass() {
         var superclass: CtTypeReference<*>? = getReference().superclass
         if (superclass == null) {
             superclass = ReflectionFactory.getInstance().createTypeReference(Object::class.java)
@@ -89,11 +87,11 @@ public open class ClassEntity<T>: TypeEntity<CtClass<T>>, GenericDeclarationEnti
         superClass.follow()
     }
 
-    public fun tagSuperInterfaces() {
+    fun tagSuperInterfaces() {
         tagSuperInterfaces(Ontology.IMPLEMENTS_PROPERTY)
     }
 
-    public fun tagConstructors() {
+    fun tagConstructors() {
         val constructors: List<ConstructorEntity> = getConstructors()
         constructors.forEach { constructor ->
             getLogger().addTriple(this, Ontology.HAS_CONSTRUCTOR_PROPERTY, constructor)
@@ -101,7 +99,7 @@ public open class ClassEntity<T>: TypeEntity<CtClass<T>>, GenericDeclarationEnti
         getConstructors().forEach(ConstructorEntity::extract)
     }
 
-    public fun getConstructors(): List<ConstructorEntity> {
+    fun getConstructors(): List<ConstructorEntity> {
         if (constructors == null) {
             setConstructors()
         }
@@ -138,7 +136,7 @@ public open class ClassEntity<T>: TypeEntity<CtClass<T>>, GenericDeclarationEnti
         }
     }
 
-    public fun tagNestedTypes() {
+    fun tagNestedTypes() {
         val nestedTypes: Set<CtType<*>> = element?.nestedTypes ?: HashSet()
         for(type: CtType<*> in nestedTypes) {
             val entity: Entity<*>? = getFactory().wrap(type)
@@ -147,11 +145,11 @@ public open class ClassEntity<T>: TypeEntity<CtClass<T>>, GenericDeclarationEnti
         }
     }
 
-    public override fun getFormalTypeParameters(): List<TypeVariableEntity> {
+    override fun getFormalTypeParameters(): List<TypeVariableEntity> {
         return FormalTypeParametersTagger.formalTypeParametersOf(this)
     }
 
-    public override fun tagFormalTypeParameters() {
+    override fun tagFormalTypeParameters() {
         FormalTypeParametersTagger(this).tagFormalTypeParameters()
     }
 }

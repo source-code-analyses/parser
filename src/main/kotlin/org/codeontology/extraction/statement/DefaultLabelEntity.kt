@@ -17,11 +17,10 @@ package org.codeontology.extraction.statement
 
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
-import org.codeontology.extraction.Entity
 import spoon.reflect.code.CtCase
 
-public class DefaultLabelEntity(label: CtCase<*>): SwitchLabelEntity(label) {
-    protected override fun getType(): RDFNode {
+class DefaultLabelEntity(label: CtCase<*>): SwitchLabelEntity(label) {
+    override fun getType(): RDFNode {
         return Ontology.DEFAULT_ENTITY
     }
 }

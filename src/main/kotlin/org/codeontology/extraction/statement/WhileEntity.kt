@@ -22,23 +22,23 @@ import org.codeontology.extraction.support.ConditionHolderEntity
 import org.codeontology.extraction.support.ConditionTagger
 import spoon.reflect.code.CtWhile
 
-public class WhileEntity(element: CtWhile): LoopEntity<CtWhile>(element), ConditionHolderEntity<CtWhile> {
-    protected override fun getType(): RDFNode {
+class WhileEntity(element: CtWhile): LoopEntity<CtWhile>(element), ConditionHolderEntity<CtWhile> {
+    override fun getType(): RDFNode {
         return Ontology.WHILE_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagCondition()
     }
 
-    public override fun getCondition(): ExpressionEntity<*> {
+    override fun getCondition(): ExpressionEntity<*> {
         val condition: ExpressionEntity<*> = getFactory().wrap(element!!.loopingExpression)
         condition.parent = this
         return condition
     }
 
-    public override fun tagCondition() {
+    override fun tagCondition() {
         ConditionTagger(this).tagCondition()
     }
 }

@@ -19,7 +19,6 @@ import org.apache.jena.rdf.model.Property
 import org.codeontology.CodeOntology
 import org.codeontology.Ontology
 import org.codeontology.extraction.NamedElementEntity
-import org.codeontology.extraction.RDFLogger
 import org.codeontology.extraction.ReflectionFactory
 import org.codeontology.extraction.support.ModifiableEntity
 import org.codeontology.extraction.support.Modifier
@@ -32,15 +31,15 @@ import spoon.reflect.reference.CtTypeReference
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 
-public abstract class TypeEntity<T: CtType<*>>: NamedElementEntity<T>, ModifiableEntity<T> {
+abstract class TypeEntity<T: CtType<*>>: NamedElementEntity<T>, ModifiableEntity<T> {
     private var methods: ArrayList<MethodEntity>? = null
     private var fields: ArrayList<FieldEntity>? = null
 
-    public constructor(type: T): super(type) {
+    constructor(type: T): super(type) {
         checkNullType()
     }
 
-    public constructor(reference: CtTypeReference<*>): super(reference) {
+    constructor(reference: CtTypeReference<*>): super(reference) {
         checkNullType()
     }
 
@@ -50,15 +49,15 @@ public abstract class TypeEntity<T: CtType<*>>: NamedElementEntity<T>, Modifiabl
         }
     }
 
-    public override fun buildRelativeURI(): String {
+    override fun buildRelativeURI(): String {
         return getReference().qualifiedName
     }
 
-    public fun getReference(): CtTypeReference<*> {
+    fun getReference(): CtTypeReference<*> {
         return reference as CtTypeReference<*>
     }
 
-    public fun tagSuperInterfaces(property: Property) {
+    fun tagSuperInterfaces(property: Property) {
         val references: Set<CtTypeReference<*>> = getReference().superInterfaces
 
         for(reference: CtTypeReference<*> in references) {
@@ -69,7 +68,7 @@ public abstract class TypeEntity<T: CtType<*>>: NamedElementEntity<T>, Modifiabl
         }
     }
 
-    public open fun tagMethods() {
+    open fun tagMethods() {
         val methods: List<MethodEntity> = getMethods()
         methods.forEach { method ->
             getLogger().addTriple(this, Ontology.HAS_METHOD_PROPERTY, method)
@@ -77,7 +76,7 @@ public abstract class TypeEntity<T: CtType<*>>: NamedElementEntity<T>, Modifiabl
         methods.forEach(MethodEntity::extract)
     }
 
-    public fun getMethods(): List<MethodEntity> {
+    fun getMethods(): List<MethodEntity> {
         if (methods == null) {
             setMethods()
         }
@@ -114,7 +113,7 @@ public abstract class TypeEntity<T: CtType<*>>: NamedElementEntity<T>, Modifiabl
         }
     }
 
-    public fun getFields(): List<FieldEntity> {
+    fun getFields(): List<FieldEntity> {
         if (fields == null) {
             setFields()
         }
@@ -151,13 +150,13 @@ public abstract class TypeEntity<T: CtType<*>>: NamedElementEntity<T>, Modifiabl
         }
     }
 
-    public open fun tagFields() {
+    open fun tagFields() {
         val fields: List<FieldEntity> = getFields()
         fields.forEach{ field -> getLogger().addTriple(this, Ontology.HAS_FIELD_PROPERTY, field) }
         fields.forEach(FieldEntity::extract)
     }
 
-    public override fun getModifiers(): List<Modifier> {
+    override fun getModifiers(): List<Modifier> {
         return if(isDeclarationAvailable()) {
             Modifier.asList(element?.modifiers ?: HashSet())
         } else {
@@ -165,7 +164,7 @@ public abstract class TypeEntity<T: CtType<*>>: NamedElementEntity<T>, Modifiabl
         }
     }
 
-    public override fun tagModifiers() {
+    override fun tagModifiers() {
         ModifiableTagger(this).tagModifiers()
     }
 

@@ -23,27 +23,27 @@ import org.codeontology.extraction.support.StatementsTagger
 import spoon.reflect.code.CtBlock
 import spoon.reflect.code.CtStatement
 
-public class BlockEntity(element: CtBlock<*>): StatementEntity<CtBlock<*>>(element), StatementsHolderEntity<CtBlock<*>> {
-    protected override fun getType(): RDFNode {
+class BlockEntity(element: CtBlock<*>): StatementEntity<CtBlock<*>>(element), StatementsHolderEntity<CtBlock<*>> {
+    override fun getType(): RDFNode {
         return Ontology.BLOCK_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagStatements()
         tagEndLine()
     }
 
-    public fun tagEndLine() {
+    fun tagEndLine() {
         LineTagger(this).tagEndLine()
     }
 
-    public override fun getStatements(): List<StatementEntity<*>> {
+    override fun getStatements(): List<StatementEntity<*>> {
         val statements: List<CtStatement> = element!!.statements
         return StatementsTagger(this).asEntities(statements)
     }
 
-    public override fun tagStatements() {
+    override fun tagStatements() {
         StatementsTagger(this).tagStatements()
     }
 }

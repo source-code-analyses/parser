@@ -20,8 +20,8 @@ import org.codeontology.extraction.declaration.PackageEntity
 import spoon.processing.AbstractProcessor
 import spoon.reflect.declaration.CtPackage
 
-public class SourceProcessor: AbstractProcessor<CtPackage>() {
-    public override fun process(pack: CtPackage) {
+class SourceProcessor: AbstractProcessor<CtPackage>() {
+    override fun process(pack: CtPackage) {
         ReflectionFactory.getInstance().parent = pack.factory
         val packageEntity: PackageEntity = EntityFactory.getInstance().wrap(pack)
         if (CodeOntology.extractProjectStructure()) {

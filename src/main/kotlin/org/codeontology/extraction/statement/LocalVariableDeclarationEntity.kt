@@ -23,31 +23,31 @@ import org.codeontology.extraction.support.VariableDeclarationEntity
 import org.codeontology.extraction.support.VariableDeclarationTagger
 import spoon.reflect.code.CtLocalVariable
 
-public class LocalVariableDeclarationEntity(element: CtLocalVariable<*>):
+class LocalVariableDeclarationEntity(element: CtLocalVariable<*>):
     StatementEntity<CtLocalVariable<*>>(element), VariableDeclarationEntity<CtLocalVariable<*>> {
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.LOCAL_VARIABLE_DECLARATION_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagVariable()
         tagInitializer()
     }
 
-    public override fun getVariable(): Entity<*>? {
+    override fun getVariable(): Entity<*>? {
         return VariableDeclarationTagger.declaredVariableOf(this)
     }
 
-    public override fun tagVariable() {
+    override fun tagVariable() {
         VariableDeclarationTagger(this).tagVariable()
     }
 
-    public override fun getInitializer(): ExpressionEntity<*>? {
+    override fun getInitializer(): ExpressionEntity<*>? {
         return VariableDeclarationTagger.initializerOf(this)
     }
 
-    public override fun tagInitializer() {
+    override fun tagInitializer() {
         VariableDeclarationTagger(this).tagInitializer()
     }
 }

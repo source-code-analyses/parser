@@ -25,12 +25,12 @@ import org.codeontology.extraction.support.VariableDeclarationEntity
 import org.codeontology.extraction.support.VariableDeclarationTagger
 import spoon.reflect.declaration.CtField
 
-public class FieldDeclaration(element: CtField<*>): CodeElementEntity<CtField<*>>(element), VariableDeclarationEntity<CtField<*>> {
-    protected override fun getType(): RDFNode? {
+class FieldDeclaration(element: CtField<*>): CodeElementEntity<CtField<*>>(element), VariableDeclarationEntity<CtField<*>> {
+    override fun getType(): RDFNode? {
         return null
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagLine()
         tagVariable()
@@ -38,23 +38,23 @@ public class FieldDeclaration(element: CtField<*>): CodeElementEntity<CtField<*>
         tagSourceCode()
     }
 
-    public override fun getInitializer(): ExpressionEntity<*>? {
+    override fun getInitializer(): ExpressionEntity<*>? {
         return VariableDeclarationTagger.initializerOf(this)
     }
 
-    public override fun tagInitializer() {
+    override fun tagInitializer() {
         VariableDeclarationTagger(this).tagInitializer()
     }
 
-    public override fun getVariable(): Entity<*>? {
+    override fun getVariable(): Entity<*>? {
         return VariableDeclarationTagger.declaredVariableOf(this)
     }
 
-    public override fun tagVariable() {
+    override fun tagVariable() {
         getLogger().addTriple(parent!!, Ontology.DECLARATION_PROPERTY, this)
     }
 
-    public fun tagLine() {
+    fun tagLine() {
         LineTagger(this).tagLine()
     }
 }

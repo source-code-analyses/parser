@@ -33,7 +33,7 @@ import spoon.support.reflect.reference.CtLocalVariableReferenceImpl
 import java.lang.reflect.Executable
 import java.util.stream.Collectors
 
-public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, MemberEntity<E>, BodyHolderEntity<E>
+abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, MemberEntity<E>, BodyHolderEntity<E>
         where E: CtExecutable<*>, E: CtTypeMember {
     private lateinit var executables: HashSet<ExecutableEntity<*>>
     private lateinit var requestedTypes: HashSet<TypeEntity<*>>
@@ -43,11 +43,11 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
     private lateinit var fields: HashSet<FieldEntity>
     private var parameters: ArrayList<ParameterEntity>? = null
 
-    public constructor(executable: E): super(executable) {
+    constructor(executable: E): super(executable) {
         initSets()
     }
 
-    public constructor(reference: CtExecutableReference<*>): super(reference) {
+    constructor(reference: CtExecutableReference<*>): super(reference) {
         initSets()
     }
 
@@ -60,13 +60,13 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         fields = HashSet()
     }
 
-    public override fun buildRelativeURI(): String {
+    override fun buildRelativeURI(): String {
         var uri: String = reference.toString()
         uri = uri.replace(", |#", SEPARATOR)
         return uri
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagName()
         tagLabel()
         tagType()
@@ -90,20 +90,20 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         }
     }
 
-    public override fun getDeclaringElement(): Entity<*>? {
+    override fun getDeclaringElement(): Entity<*>? {
         val reference: CtExecutableReference<*> = reference as CtExecutableReference<*>
         return getFactory().wrap(reference.declaringType)
     }
 
-    public override fun tagDeclaringElement() {
+    override fun tagDeclaringElement() {
         DeclaringElementTagger(this).tagDeclaredBy()
     }
 
-    public override fun tagModifiers() {
+    override fun tagModifiers() {
         ModifiableTagger(this).tagModifiers()
     }
 
-    public override fun getModifiers(): List<Modifier> {
+    override fun getModifiers(): List<Modifier> {
         if (isDeclarationAvailable()) {
             return Modifier.asList(element?.modifiers ?: HashSet())
         } else {
@@ -117,7 +117,7 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         }
     }
 
-    public fun tagParameters() {
+    fun tagParameters() {
         val parameters: List<ParameterEntity> = getParameters()
         for(i in parameters.indices) {
             val parameter: ParameterEntity = parameters[i]
@@ -128,7 +128,7 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         }
     }
 
-    public fun getParameters(): List<ParameterEntity> {
+    fun getParameters(): List<ParameterEntity> {
         if (parameters == null) {
             setParameters()
         }
@@ -150,7 +150,7 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         }
     }
 
-    public fun tagThrows() {
+    fun tagThrows() {
         val thrownTypes: Set<CtTypeReference<out Throwable>> = element?.thrownTypes ?: HashSet()
         for(current: CtTypeReference<out Throwable> in thrownTypes) {
             val thrownType: TypeEntity<*>? = getFactory().wrap(current)
@@ -189,7 +189,7 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
 
     }
 
-    public fun addAnonymousClasses(statement: CtStatement) {
+    fun addAnonymousClasses(statement: CtStatement) {
         val newClasses: List<CtNewClass<*>> = statement.getElements{ element -> element != null }
         for(newClass: CtNewClass<*> in newClasses) {
             val anonymousClass: AnonymousClassEntity<*> = AnonymousClassEntity(newClass.anonymousClass)
@@ -198,7 +198,7 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         }
     }
 
-    public fun tagAnonymousClasses() {
+    fun tagAnonymousClasses() {
         for(anonymousClass: AnonymousClassEntity<*> in anonymousClasses) {
             getLogger().addTriple(this, Ontology.CONSTRUCTS_PROPERTY, anonymousClass)
             anonymousClass.extract()
@@ -206,7 +206,7 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         }
     }
 
-    public fun addInvocations(statement: CtStatement) {
+    fun addInvocations(statement: CtStatement) {
         val references: List<CtExecutableReference<*>> = statement.getElements(ReferenceTypeFilter(CtExecutableReferenceImpl::class.java))
 
         for(reference: CtExecutableReference<*> in references) {
@@ -221,14 +221,14 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         }
     }
 
-    public fun tagLambdas() {
+    fun tagLambdas() {
         for(lambda: LambdaEntity in lambdas) {
             tagRequests(lambda)
             lambda.extract()
         }
     }
 
-    public fun addLambdas(statement: CtStatement) {
+    fun addLambdas(statement: CtStatement) {
         val lambdas: List<CtLambda<*>> = statement.getElements{ element -> element != null }
         for(lambda: CtLambda<*> in lambdas) {
             val lambdaEntity: LambdaEntity = getFactory().wrap(lambda)
@@ -237,21 +237,21 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         }
     }
 
-    public fun addRequestedFields(statement: CtStatement) {
+    fun addRequestedFields(statement: CtStatement) {
         val references: List<CtFieldReference<*>> = statement.getElements(ReferenceTypeFilter(CtFieldReferenceImpl::class.java))
         references.stream()
                 .map(getFactory()::wrap)
                 .forEach(fields::add)
     }
 
-    public fun tagRequestedFields() {
+    fun tagRequestedFields() {
         for(field: FieldEntity in fields) {
             tagRequests(field)
             field.follow()
         }
     }
 
-    public fun addRequestedTypes(types: Set<CtTypeReference<*>>) {
+    fun addRequestedTypes(types: Set<CtTypeReference<*>>) {
         for(reference: CtTypeReference<*> in types) {
             if(!reference.isImplicit) {
                 val type: TypeEntity<*>? = getFactory().wrap(reference)
@@ -263,7 +263,7 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         }
     }
 
-    public fun tagRequestedTypes() {
+    fun tagRequestedTypes() {
         for(type: TypeEntity<*> in requestedTypes) {
             tagRequests(type)
             type.follow()
@@ -276,7 +276,7 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         return newClasses.isNotEmpty()
     }
 
-    public fun addLocalVariables(statement: CtStatement) {
+    fun addLocalVariables(statement: CtStatement) {
         val references: List<CtLocalVariableReference<*>> = statement.getElements(ReferenceTypeFilter(CtLocalVariableReferenceImpl::class.java))
 
         for(reference: CtLocalVariableReference<*> in references) {
@@ -289,14 +289,14 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         }
     }
 
-    public fun tagLocalVariables() {
+    fun tagLocalVariables() {
         for(variable: LocalVariableEntity in localVariables) {
             tagRequests(variable)
             variable.extract()
         }
     }
 
-    public fun tagExecutables() {
+    fun tagExecutables() {
         for(executable: ExecutableEntity<*> in executables) {
             tagRequests(executable)
             if (executable is ConstructorEntity) {
@@ -306,17 +306,17 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         }
     }
 
-    public fun tagConstructs(executable: ExecutableEntity<*>) {
+    fun tagConstructs(executable: ExecutableEntity<*>) {
         val declaringType: Entity<*>? = executable.getDeclaringElement()
         getLogger().addTriple(this, Ontology.CONSTRUCTS_PROPERTY, declaringType!!)
         declaringType.follow()
     }
 
-    public fun tagRequests(requested: Entity<*>) {
+    fun tagRequests(requested: Entity<*>) {
         getLogger().addTriple(this, Ontology.REFERENCES_PROPERTY, requested)
     }
 
-    public fun tagReturnsVariable(returnStatement: CtReturn<*>) {
+    fun tagReturnsVariable(returnStatement: CtReturn<*>) {
         val returned: CtExpression<*> = returnStatement.returnedExpression
         if (returned is CtVariableAccess<*>) {
             val reference: CtVariableReference<*> = returned.variable ?: return
@@ -332,7 +332,7 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         }
     }
 
-    public fun getRequestedResources(): List<Entity<*>> {
+    fun getRequestedResources(): List<Entity<*>> {
         val requestedResources: ArrayList<Entity<*>> = ArrayList()
 
         requestedResources.addAll(executables)
@@ -342,7 +342,7 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         return requestedResources
     }
 
-    public fun tagVarArgs() {
+    fun tagVarArgs() {
         val parameters: List<ParameterEntity> = getParameters()
         val size: Int = parameters.size
         var value = false
@@ -361,7 +361,7 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         getLogger().addTriple(this, Ontology.VAR_ARGS_PROPERTY, model.createTypedLiteral(value))
     }
 
-    public override fun getBody(): StatementEntity<*>? {
+    override fun getBody(): StatementEntity<*>? {
         val executable: CtExecutable<*>? = element
         val body: CtBlock<*>? = executable?.body
         if (body != null) {
@@ -373,7 +373,7 @@ public abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEnti
         return null
     }
 
-    public override fun tagBody() {
+    override fun tagBody() {
         if (CodeOntology.processStatements()) {
             BodyTagger(this).tagBody()
         }

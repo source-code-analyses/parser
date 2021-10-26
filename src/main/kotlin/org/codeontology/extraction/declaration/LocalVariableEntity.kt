@@ -23,8 +23,8 @@ import org.codeontology.extraction.support.*
 import spoon.reflect.code.CtLocalVariable
 import spoon.reflect.reference.CtTypeReference
 
-public class LocalVariableEntity(variable: CtLocalVariable<*>): NamedElementEntity<CtLocalVariable<*>>(variable), MemberEntity<CtLocalVariable<*>>, TypedElementEntity<CtLocalVariable<*>>, ModifiableEntity<CtLocalVariable<*>> {
-    public override fun extract() {
+class LocalVariableEntity(variable: CtLocalVariable<*>): NamedElementEntity<CtLocalVariable<*>>(variable), MemberEntity<CtLocalVariable<*>>, TypedElementEntity<CtLocalVariable<*>>, ModifiableEntity<CtLocalVariable<*>> {
+    override fun extract() {
         tagType()
         tagName()
         tagLabel()
@@ -34,38 +34,38 @@ public class LocalVariableEntity(variable: CtLocalVariable<*>): NamedElementEnti
         tagSourceCode()
     }
 
-    public override fun getModifiers(): List<Modifier> {
+    override fun getModifiers(): List<Modifier> {
         return Modifier.asList(element?.modifiers ?: HashSet())
     }
 
-    public override fun tagModifiers() {
+    override fun tagModifiers() {
         ModifiableTagger(this).tagModifiers()
     }
 
-    public override fun buildRelativeURI(): String {
+    override fun buildRelativeURI(): String {
         return parent?.getRelativeURI() + SEPARATOR + element!!.simpleName
     }
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.LOCAL_VARIABLE_ENTITY
     }
 
-    public override fun getDeclaringElement(): Entity<*> {
+    override fun getDeclaringElement(): Entity<*> {
         return parent!!
     }
 
-    public override fun tagDeclaringElement() {
+    override fun tagDeclaringElement() {
         DeclaringElementTagger(this).tagDeclaredBy()
     }
 
-    public override fun getJavaType(): TypeEntity<*> {
+    override fun getJavaType(): TypeEntity<*> {
         val type: CtTypeReference<*> = element!!.type
         val entity: TypeEntity<*>? = getFactory().wrap(type)
         entity!!.parent = getParent(ExecutableEntity::class.java, TypeEntity::class.java)!!
         return entity
     }
 
-    public override fun tagJavaType() {
+    override fun tagJavaType() {
         JavaTypeTagger(this).tagJavaType()
     }
 }

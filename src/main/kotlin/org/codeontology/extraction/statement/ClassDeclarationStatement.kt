@@ -22,17 +22,17 @@ import org.codeontology.extraction.declaration.TypeEntity
 import spoon.reflect.declaration.CtClass
 import spoon.reflect.declaration.CtType
 
-public class ClassDeclarationStatement(element: CtClass<*>): StatementEntity<CtClass<*>>(element) {
-    protected override fun getType(): RDFNode {
+class ClassDeclarationStatement(element: CtClass<*>): StatementEntity<CtClass<*>>(element) {
+    override fun getType(): RDFNode {
         return Ontology.CLASS_DECLARATION_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagDeclaredClass()
     }
 
-    public fun getDeclaredClass(): TypeEntity<*> {
+    fun getDeclaredClass(): TypeEntity<*> {
         val type: TypeEntity<*> = getFactory().wrap(element as CtType<*>)!!
         type.parent = getParent(ExecutableEntity::class.java, TypeEntity::class.java)!!
         return type

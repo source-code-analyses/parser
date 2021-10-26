@@ -19,7 +19,7 @@ import org.codeontology.extraction.Entity
 import org.codeontology.extraction.declaration.TypeVariableEntity
 import spoon.reflect.declaration.CtElement
 
-public interface GenericDeclarationEntity<T: CtElement>: Entity<T> {
+interface GenericDeclarationEntity<T: CtElement>: Entity<T> {
     fun getFormalTypeParameters(): List<TypeVariableEntity>
 
     fun tagFormalTypeParameters()

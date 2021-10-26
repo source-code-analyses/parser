@@ -18,7 +18,7 @@ package org.codeontology.extraction.support
 import org.codeontology.extraction.Entity
 import org.codeontology.extraction.expression.ExpressionEntity
 
-public interface ExpressionHolderEntity<E>: Entity<E> {
+interface ExpressionHolderEntity<E>: Entity<E> {
     fun getExpression(): ExpressionEntity<*>?
 
     fun tagExpression()

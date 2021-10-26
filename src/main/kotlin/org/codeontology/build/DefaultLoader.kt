@@ -15,8 +15,8 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.build
 
-public class DefaultLoader(override val project: DefaultProject): DependenciesLoader<DefaultProject>(project) {
-    public override fun loadDependencies() {
+class DefaultLoader(override val project: DefaultProject): DependenciesLoader<DefaultProject>(project) {
+    override fun loadDependencies() {
         loader.loadAllJars(project.root)
     }
 }

@@ -15,31 +15,29 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.extraction.statement
 
-import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
 import org.codeontology.extraction.Entity
-import org.codeontology.extraction.RDFLogger
 import org.codeontology.extraction.expression.ExpressionEntity
 import org.codeontology.extraction.support.ConditionHolderEntity
 import org.codeontology.extraction.support.ConditionTagger
 import spoon.reflect.code.CtExpression
 import spoon.reflect.code.CtFor
 
-public class ForEntity(element: CtFor):
+class ForEntity(element: CtFor):
     LoopEntity<CtFor>(element), ConditionHolderEntity<CtFor> {
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.FOR_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagForInit()
         tagCondition()
         tagForUpdate()
     }
 
-    public override fun getCondition(): ExpressionEntity<*>? {
+    override fun getCondition(): ExpressionEntity<*>? {
         val expression: CtExpression<*>? = element!!.expression
         if (expression != null) {
             val condition: ExpressionEntity<*> = getFactory().wrap(expression)
@@ -50,7 +48,7 @@ public class ForEntity(element: CtFor):
         return null
     }
 
-    public override fun tagCondition() {
+    override fun tagCondition() {
         ConditionTagger(this).tagCondition()
     }
 
@@ -61,7 +59,7 @@ public class ForEntity(element: CtFor):
         return forInit
     }
 
-    public fun tagForInit() {
+    fun tagForInit() {
         val forInit: List<Entity<*>> = getForInit().element!!
         for (init: Entity<*> in forInit) {
             getLogger().addTriple(this, Ontology.FOR_INIT_PROPERTY, init)
@@ -76,7 +74,7 @@ public class ForEntity(element: CtFor):
         return forUpdate
     }
 
-    public fun tagForUpdate() {
+    fun tagForUpdate() {
         val forUpdate: List<Entity<*>> = getForUpdate().element!!
         for (update: Entity<*> in forUpdate) {
             getLogger().addTriple(this, Ontology.FOR_UPDATE_PROPERTY, update)

@@ -23,17 +23,17 @@ import org.codeontology.extraction.support.ExpressionTagger
 import spoon.reflect.code.CtExpression
 import spoon.reflect.code.CtStatement
 
-public class ExpressionStatementEntity(element: CtStatement): StatementEntity<CtStatement>(element), ExpressionHolderEntity<CtStatement> {
-    protected override fun getType(): RDFNode {
+class ExpressionStatementEntity(element: CtStatement): StatementEntity<CtStatement>(element), ExpressionHolderEntity<CtStatement> {
+    override fun getType(): RDFNode {
         return Ontology.EXPRESSION_STATEMENT_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagExpression()
     }
 
-    public override fun getExpression(): ExpressionEntity<*>? {
+    override fun getExpression(): ExpressionEntity<*>? {
         if(element is CtExpression<*>) {
             val expression: ExpressionEntity<*> = getFactory().wrap(element as CtExpression<*>)
             expression.parent = this
@@ -43,7 +43,7 @@ public class ExpressionStatementEntity(element: CtStatement): StatementEntity<Ct
         return null
     }
 
-    public override fun tagExpression() {
+    override fun tagExpression() {
         ExpressionTagger(this).tagExpression()
     }
 }

@@ -18,7 +18,7 @@ package org.codeontology.extraction.statement
 import spoon.reflect.code.*
 import spoon.reflect.declaration.CtClass
 
-public enum class StatementKind {
+enum class StatementKind {
     BLOCK,
     IF_THEN_ELSE,
     SWITCH,
@@ -39,7 +39,8 @@ public enum class StatementKind {
     STATEMENT;
 
     companion object {
-        @JvmStatic public fun getKindOf(statement: CtStatement): StatementKind {
+        @JvmStatic
+        fun getKindOf(statement: CtStatement): StatementKind {
             return when (statement) {
                 is CtBlock<*> -> BLOCK
                 is CtIf -> IF_THEN_ELSE

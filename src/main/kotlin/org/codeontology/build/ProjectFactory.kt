@@ -21,10 +21,11 @@ import org.codeontology.build.maven.MavenProject
 
 import java.io.File
 
-public class ProjectFactory {
+class ProjectFactory {
     companion object {
         @JvmStatic private var instance: ProjectFactory? = null
-        @JvmStatic public fun getInstance(): ProjectFactory {
+        @JvmStatic
+        fun getInstance(): ProjectFactory {
             if (instance == null) {
                 instance = ProjectFactory()
             }
@@ -33,11 +34,11 @@ public class ProjectFactory {
         }
     }
 
-    public fun getProject(path: String): Project {
+    fun getProject(path: String): Project {
         return getProject(File(path))
     }
 
-    public fun getProject(project: File): Project {
+    fun getProject(project: File): Project {
         return when(BuildSystem.getBuildSystem(project)) {
             BuildSystem.MAVEN -> MavenProject(project)
             BuildSystem.GRADLE -> if (File(project.path + "/src/main/AndroidManifest.xml").exists()) {

@@ -17,24 +17,23 @@ package org.codeontology.extraction.statement
 
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
-import org.codeontology.extraction.Entity
 import org.codeontology.extraction.expression.ExpressionEntity
 import org.codeontology.extraction.support.ExpressionHolderEntity
 import org.codeontology.extraction.support.ExpressionTagger
 import spoon.reflect.code.CtCase
 import spoon.reflect.code.CtExpression
 
-public class CaseLabelEntity(label: CtCase<*>): SwitchLabelEntity(label), ExpressionHolderEntity<CtCase<*>> {
-    protected override fun getType(): RDFNode {
+class CaseLabelEntity(label: CtCase<*>): SwitchLabelEntity(label), ExpressionHolderEntity<CtCase<*>> {
+    override fun getType(): RDFNode {
         return Ontology.CASE_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagExpression()
     }
 
-    public override fun getExpression(): ExpressionEntity<*>? {
+    override fun getExpression(): ExpressionEntity<*>? {
         val caseExpression: CtExpression<*>? = element!!.caseExpression
         if (caseExpression != null) {
             val expression: ExpressionEntity<*> = getFactory().wrap(caseExpression)
@@ -45,7 +44,7 @@ public class CaseLabelEntity(label: CtCase<*>): SwitchLabelEntity(label), Expres
         return null
     }
 
-    public override fun tagExpression() {
+    override fun tagExpression() {
         ExpressionTagger(this).tagExpression()
     }
 }

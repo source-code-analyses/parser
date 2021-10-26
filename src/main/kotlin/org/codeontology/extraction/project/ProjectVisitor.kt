@@ -21,26 +21,26 @@ import org.codeontology.build.gradle.AndroidProject
 import org.codeontology.build.gradle.GradleProject
 import org.codeontology.build.maven.MavenProject
 
-public class ProjectVisitor {
+class ProjectVisitor {
     private var lastEntity: ProjectEntity<*>? = null
 
-    public fun visit(project: DefaultProject) {
+    fun visit(project: DefaultProject) {
         lastEntity = EntityFactory.getInstance().wrap(project)
     }
 
-    public fun visit(project: GradleProject) {
+    fun visit(project: GradleProject) {
         lastEntity = EntityFactory.getInstance().wrap(project)
     }
 
-    public fun visit(project: MavenProject) {
+    fun visit(project: MavenProject) {
         lastEntity = EntityFactory.getInstance().wrap(project)
     }
 
-    public fun visit(project: AndroidProject) {
+    fun visit(project: AndroidProject) {
         lastEntity = EntityFactory.getInstance().wrap(project)
     }
 
-    public fun getLastEntity(): ProjectEntity<*>? {
+    fun getLastEntity(): ProjectEntity<*>? {
         return lastEntity
     }
 }

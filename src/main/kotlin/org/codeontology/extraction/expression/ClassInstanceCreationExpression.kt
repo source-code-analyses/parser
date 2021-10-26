@@ -17,11 +17,10 @@ package org.codeontology.extraction.expression
 
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
-import org.codeontology.extraction.Entity
 import spoon.reflect.code.CtConstructorCall
 
-public class ClassInstanceCreationExpression(expression: CtConstructorCall<*>): AbstractInvocationExpressionEntity<CtConstructorCall<*>>(expression) {
-    protected override fun getType(): RDFNode {
+class ClassInstanceCreationExpression(expression: CtConstructorCall<*>): AbstractInvocationExpressionEntity<CtConstructorCall<*>>(expression) {
+    override fun getType(): RDFNode {
         return Ontology.CLASS_INSTANCE_CREATION_EXPRESSION_ENTITY
     }
 }

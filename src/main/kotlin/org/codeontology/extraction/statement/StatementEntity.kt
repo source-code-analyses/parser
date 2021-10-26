@@ -19,23 +19,22 @@ import org.apache.jena.rdf.model.Literal
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
 import org.codeontology.extraction.CodeElementEntity
-import org.codeontology.extraction.Entity
 import org.codeontology.extraction.RDFLogger
 import org.codeontology.extraction.support.LineTagger
 import spoon.reflect.code.CtStatement
 
-public open class StatementEntity<E: CtStatement>(element: E): CodeElementEntity<E>(element) {
-    public var position: Int = 0
+open class StatementEntity<E: CtStatement>(element: E): CodeElementEntity<E>(element) {
+    var position: Int = 0
 
-    public override fun buildRelativeURI(): String {
+    override fun buildRelativeURI(): String {
         return super.buildRelativeURI("statement")
     }
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.STATEMENT_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagPosition()
         tagLine()
@@ -43,7 +42,7 @@ public open class StatementEntity<E: CtStatement>(element: E): CodeElementEntity
         tagLabel()
     }
 
-    public fun tagLabel() {
+    fun tagLabel() {
         val labelString: String? = element?.label
         if (labelString != null) {
             val label: Literal = model.createTypedLiteral(labelString)
@@ -51,11 +50,11 @@ public open class StatementEntity<E: CtStatement>(element: E): CodeElementEntity
         }
     }
 
-    public fun tagLine() {
+    fun tagLine() {
         LineTagger(this).tagLine()
     }
 
-    public fun tagPosition() {
+    fun tagPosition() {
         val position: Literal = model.createTypedLiteral(this.position)
         RDFLogger.getInstance().addTriple(this, Ontology.POSITION_PROPERTY, position)
     }

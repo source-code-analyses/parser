@@ -19,7 +19,7 @@ import org.codeontology.extraction.Entity
 import org.codeontology.extraction.expression.ExpressionEntity
 import spoon.reflect.declaration.CtElement
 
-public interface ConditionHolderEntity<E: CtElement>: Entity<E> {
+interface ConditionHolderEntity<E: CtElement>: Entity<E> {
 
     fun getCondition(): ExpressionEntity<*>?
 

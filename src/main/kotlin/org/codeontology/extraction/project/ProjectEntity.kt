@@ -25,8 +25,8 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
 
-public abstract class ProjectEntity<T: Project>(project: T): AbstractEntity<T>(project) {
-    protected override fun buildRelativeURI(): String {
+abstract class ProjectEntity<T: Project>(project: T): AbstractEntity<T>(project) {
+    override fun buildRelativeURI(): String {
         val code: String
         if (element!!.getBuildFile() == null) {
             code = try {
@@ -49,23 +49,23 @@ public abstract class ProjectEntity<T: Project>(project: T): AbstractEntity<T>(p
         return getPrefix() + element!!.getName() + SEPARATOR + code
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagBuildFile()
         tagSubProjects()
         tagName()
     }
 
-    public fun tagName() {
+    fun tagName() {
         val name: String = element!!.getName()
         val label: Literal = model.createTypedLiteral(name)
         getLogger().addTriple(this, Ontology.RDFS_LABEL_PROPERTY, label)
     }
 
-    public fun tagSubProjects() {
+    fun tagSubProjects() {
         val subProjects: Collection<Project> = element!!.subProjects
         for (subProject: Project in subProjects) {
-            val visitor: ProjectVisitor = ProjectVisitor()
+            val visitor = ProjectVisitor()
             subProject.accept(visitor)
             val entity: ProjectEntity<*>? = visitor.getLastEntity()
             entity!!.parent = this
@@ -74,7 +74,7 @@ public abstract class ProjectEntity<T: Project>(project: T): AbstractEntity<T>(p
         }
     }
 
-    public fun tagBuildFile() {
+    fun tagBuildFile() {
         if (element!!.getBuildFile() != null) {
             val buildFileContent: String = element!!.getBuildFileContent()
             val buildFileLiteral: Literal = model.createTypedLiteral(buildFileContent)

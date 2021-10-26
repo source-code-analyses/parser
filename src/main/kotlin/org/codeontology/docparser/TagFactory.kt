@@ -16,10 +16,11 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 package org.codeontology.docparser
 
 
-public class TagFactory {
+class TagFactory {
     companion object {
         @JvmStatic private var instance: TagFactory? = null
-        @JvmStatic public fun getInstance(): TagFactory {
+        @JvmStatic
+        fun getInstance(): TagFactory {
             if(instance == null) {
                 instance = TagFactory()
             }
@@ -28,7 +29,7 @@ public class TagFactory {
         }
     }
 
-    public fun createTag(name: String, text: String): Tag {
+    fun createTag(name: String, text: String): Tag {
         return when(name) {
             ParamTag.TAG -> ParamTag(text)
             ReturnTag.TAG -> ReturnTag(text)

@@ -15,21 +15,18 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.extraction.declaration
 
-import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
-import org.codeontology.extraction.Entity
-import org.codeontology.extraction.RDFLogger
 import spoon.reflect.declaration.CtAnnotationType
 import spoon.reflect.reference.CtTypeReference
 
-public class AnnotationEntity(reference: CtTypeReference<*>):
+class AnnotationEntity(reference: CtTypeReference<*>):
     TypeEntity<CtAnnotationType<*>>(reference) {
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.ANNOTATION_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagName()
         tagLabel()

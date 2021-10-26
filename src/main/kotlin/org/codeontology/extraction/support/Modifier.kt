@@ -19,7 +19,7 @@ import org.apache.jena.rdf.model.Resource
 import org.codeontology.Ontology
 import spoon.reflect.declaration.ModifierKind
 
-public enum class Modifier(private val individual: Resource) {
+enum class Modifier(private val individual: Resource) {
     PUBLIC (Ontology.PUBLIC_INDIVIDUAL),
     PRIVATE (Ontology.PRIVATE_INDIVIDUAL),
     PROTECTED (Ontology.PROTECTED_INDIVIDUAL),
@@ -30,12 +30,13 @@ public enum class Modifier(private val individual: Resource) {
     SYNCHRONIZED (Ontology.SYNCHRONIZED_INDIVIDUAL),
     VOLATILE (Ontology.VOLATILE_INDIVIDUAL);
 
-    public fun getIndividual(): Resource {
+    fun getIndividual(): Resource {
         return individual
     }
 
     companion object {
-        @JvmStatic public fun asList(set: Set<ModifierKind>): List<Modifier> {
+        @JvmStatic
+        fun asList(set: Set<ModifierKind>): List<Modifier> {
             val list = ArrayList<Modifier>()
 
             for(current in set) {
@@ -47,7 +48,8 @@ public enum class Modifier(private val individual: Resource) {
             return list
         }
 
-        @JvmStatic public fun asList(code: Int): List<Modifier> {
+        @JvmStatic
+        fun asList(code: Int): List<Modifier> {
             val list = ArrayList<Modifier>()
 
             if(java.lang.reflect.Modifier.isPublic(code)) {
@@ -86,7 +88,8 @@ public enum class Modifier(private val individual: Resource) {
             return list
         }
 
-        @JvmStatic public fun valueOf(modifier: ModifierKind): Modifier {
+        @JvmStatic
+        fun valueOf(modifier: ModifierKind): Modifier {
             return when(modifier) {
                 ModifierKind.PUBLIC -> PUBLIC
                 ModifierKind.PRIVATE -> PRIVATE

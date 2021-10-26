@@ -15,35 +15,33 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.extraction.statement
 
-import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
-import org.codeontology.extraction.RDFLogger
 import org.codeontology.extraction.declaration.LocalVariableEntity
 import org.codeontology.extraction.expression.ExpressionEntity
 import org.codeontology.extraction.support.ExpressionHolderEntity
 import org.codeontology.extraction.support.ExpressionTagger
 import spoon.reflect.code.CtForEach
 
-public class ForEachEntity(element: CtForEach):
+class ForEachEntity(element: CtForEach):
     LoopEntity<CtForEach>(element), ExpressionHolderEntity<CtForEach> {
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.FOR_EACH_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagExpression()
         tagVariable()
     }
 
-    public override fun getExpression(): ExpressionEntity<*> {
+    override fun getExpression(): ExpressionEntity<*> {
         val expression: ExpressionEntity<*> = getFactory().wrap(element!!.expression)
         expression.parent = this
         return expression
     }
 
-    public override fun tagExpression() {
+    override fun tagExpression() {
         ExpressionTagger(this).tagExpression()
     }
 
@@ -53,7 +51,7 @@ public class ForEachEntity(element: CtForEach):
         return variable
     }
 
-    public fun tagVariable() {
+    fun tagVariable() {
         val variable: LocalVariableEntity = getVariable()
         getLogger().addTriple(this, Ontology.VARIABLE_PROPERTY, variable)
         variable.extract()

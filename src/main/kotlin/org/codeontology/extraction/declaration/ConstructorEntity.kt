@@ -17,17 +17,16 @@ package org.codeontology.extraction.declaration
 
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
-import org.codeontology.extraction.Entity
 import spoon.reflect.declaration.CtConstructor
 import spoon.reflect.reference.CtExecutableReference
 
-public class ConstructorEntity: ExecutableEntity<CtConstructor<*>> {
+class ConstructorEntity: ExecutableEntity<CtConstructor<*>> {
 
-    public constructor(constructorEntity: CtConstructor<*>): super(constructorEntity)
+    constructor(constructorEntity: CtConstructor<*>): super(constructorEntity)
 
-    public constructor(reference: CtExecutableReference<*>): super(reference)
+    constructor(reference: CtExecutableReference<*>): super(reference)
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.CONSTRUCTOR_ENTITY
     }
 }

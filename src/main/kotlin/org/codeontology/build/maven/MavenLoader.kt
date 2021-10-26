@@ -24,7 +24,7 @@ import java.io.File
 import java.io.IOException
 import java.util.Scanner
 
-public class MavenLoader(project: MavenProject): DependenciesLoader<MavenProject>(project) {
+class MavenLoader(project: MavenProject): DependenciesLoader<MavenProject>(project) {
     companion object {
         @JvmStatic private val PATH_TO_DEPENDENCIES: String = "/target/dependency/"
         @JvmStatic private var m2Loaded: Boolean = false
@@ -33,7 +33,7 @@ public class MavenLoader(project: MavenProject): DependenciesLoader<MavenProject
     private val output: File = File(project.getPath() + "/output")
     private val error: File = File(project.getPath() + "/error")
 
-    public override fun loadDependencies() {
+    override fun loadDependencies() {
         println("Loading dependencies with Maven")
         try {
             if (CodeOntology.downloadDependencies()) {
@@ -84,7 +84,7 @@ public class MavenLoader(project: MavenProject): DependenciesLoader<MavenProject
      * folder {@code projectRoot}, and save them in
      * projectRoot/target/dependency/.
      */
-    public fun downloadDependencies() {
+    fun downloadDependencies() {
         try {
             val downloadDirectory = File(project.getPath() + PATH_TO_DEPENDENCIES)
 
@@ -113,7 +113,7 @@ public class MavenLoader(project: MavenProject): DependenciesLoader<MavenProject
      * Output folder is the project root, name goes as:
      * {@code dependencyName.jar}.
      */
-    public fun jarModules() {
+    fun jarModules() {
         project.subProjects.forEach{module ->
             run {
                 if (!module.projectDirectory.toPath().equals(project.projectDirectory.toPath())) {

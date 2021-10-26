@@ -13,15 +13,17 @@ You should have received a copy of the GNU General Public License
 along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 */
 
+@file:Suppress("PropertyName")
+
 package org.codeontology.extraction
 
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.Resource
 
-public interface Entity<E> {
-    public val element: E?
-    public var parent: Entity<*>?
-    public val model: Model
+interface Entity<E> {
+    val element: E?
+    var parent: Entity<*>?
+    val model: Model
         get() = RDFLogger.getInstance().model
 
     val SEPARATOR: String

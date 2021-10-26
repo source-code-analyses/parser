@@ -18,8 +18,8 @@ package org.codeontology.extraction.support
 import org.codeontology.Ontology
 import org.codeontology.extraction.RDFLogger
 
-public class TargetedLabelTagger(private val entity: FlowBreakerEntity<*>) {
-    public fun tagTargetedLabel() {
+class TargetedLabelTagger(private val entity: FlowBreakerEntity<*>) {
+    fun tagTargetedLabel() {
         val labelString: String = entity.getTargetedLabel()
 
         val label = entity.model.createTypedLiteral(labelString)

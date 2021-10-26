@@ -23,24 +23,24 @@ import org.codeontology.extraction.support.ExpressionTagger
 import spoon.reflect.code.CtExpression
 import spoon.reflect.code.CtThrow
 
-public class ThrowEntity(statement: CtThrow): StatementEntity<CtThrow>(statement), ExpressionHolderEntity<CtThrow> {
-    protected override fun getType(): RDFNode {
+class ThrowEntity(statement: CtThrow): StatementEntity<CtThrow>(statement), ExpressionHolderEntity<CtThrow> {
+    override fun getType(): RDFNode {
         return Ontology.THROW_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagExpression()
     }
 
-    public override fun getExpression(): ExpressionEntity<*> {
+    override fun getExpression(): ExpressionEntity<*> {
         val thrownExpression: CtExpression<out Throwable>? = element?.thrownExpression
         val expression: ExpressionEntity<*> = getFactory().wrap(thrownExpression!!)
         expression.parent = this
         return expression
     }
 
-    public override fun tagExpression() {
+    override fun tagExpression() {
         ExpressionTagger(this).tagExpression(Ontology.THROWN_EXPRESSION_PROPERTY)
     }
 }

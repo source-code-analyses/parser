@@ -23,45 +23,70 @@ import kotlin.system.exitProcess
 
 class CodeOntologyArguments(args: Array<String>) {
     companion object {
-        @JvmStatic public val INPUT_LONG = "input"
-        @JvmStatic public val INPUT_SHORT = 'i'
+        @JvmStatic
+        val INPUT_LONG = "input"
+        @JvmStatic
+        val INPUT_SHORT = 'i'
 
-        @JvmStatic public val OUTPUT_LONG = "output"
-        @JvmStatic public val OUTPUT_SHORT = 'o'
+        @JvmStatic
+        val OUTPUT_LONG = "output"
+        @JvmStatic
+        val OUTPUT_SHORT = 'o'
 
-        @JvmStatic public val CLASSPATH_LONG = "classpath"
+        @JvmStatic
+        val CLASSPATH_LONG = "classpath"
 
-        @JvmStatic public val DO_NOT_DOWNLOAD_LONG = "do-not-download"
+        @JvmStatic
+        val DO_NOT_DOWNLOAD_LONG = "do-not-download"
 
-        @JvmStatic public val VERBOSE_LONG = "verbose"
-        @JvmStatic public val VERBOSE_SHORT = 'v'
+        @JvmStatic
+        val VERBOSE_LONG = "verbose"
+        @JvmStatic
+        val VERBOSE_SHORT = 'v'
 
-        @JvmStatic public val STACKTRACE_LONG = "stacktrace"
-        @JvmStatic public val STACKTRACE_SHORT = 't'
+        @JvmStatic
+        val STACKTRACE_LONG = "stacktrace"
+        @JvmStatic
+        val STACKTRACE_SHORT = 't'
 
-        @JvmStatic public val HELP_LONG = "help"
-        @JvmStatic public val HELP_SHORT = 'h'
+        @JvmStatic
+        val HELP_LONG = "help"
+        @JvmStatic
+        val HELP_SHORT = 'h'
 
-        @JvmStatic public val SHUTDOWN_LONG = "shutdown"
+        @JvmStatic
+        val SHUTDOWN_LONG = "shutdown"
 
-        @JvmStatic public val JAR_INPUT_LONG = "jar"
+        @JvmStatic
+        val JAR_INPUT_LONG = "jar"
 
-        @JvmStatic public val DEPENDENCIES_LONG = "dependencies"
-        @JvmStatic public val DEPENDENCIES_SHORT = 'd'
+        @JvmStatic
+        val DEPENDENCIES_LONG = "dependencies"
+        @JvmStatic
+        val DEPENDENCIES_SHORT = 'd'
 
-        @JvmStatic public val DO_NOT_EXTRACT_LONG = "do-not-extract"
+        @JvmStatic
+        val DO_NOT_EXTRACT_LONG = "do-not-extract"
 
-        @JvmStatic public val FORCE_LONG = "force"
-        @JvmStatic public val FORCE_SHORT = 'f'
+        @JvmStatic
+        val FORCE_LONG = "force"
+        @JvmStatic
+        val FORCE_SHORT = 'f'
 
-        @JvmStatic public val PROJECT_STRUCTURE_LONG = "project"
-        @JvmStatic public val PROJECT_STRUCTURE_SHORT = 'p'
+        @JvmStatic
+        val PROJECT_STRUCTURE_LONG = "project"
+        @JvmStatic
+        val PROJECT_STRUCTURE_SHORT = 'p'
 
-        @JvmStatic public val STATEMENTS_LONG = "statements"
-        @JvmStatic public val STATEMENTS_SHORT = 's'
+        @JvmStatic
+        val STATEMENTS_LONG = "statements"
+        @JvmStatic
+        val STATEMENTS_SHORT = 's'
 
-        @JvmStatic public val EXPRESSIONS_LONG = "expressions"
-        @JvmStatic public val EXPRESSIONS_SHORT = 'e'
+        @JvmStatic
+        val EXPRESSIONS_LONG = "expressions"
+        @JvmStatic
+        val EXPRESSIONS_SHORT = 'e'
     }
 
     private lateinit var jsap: JSAP

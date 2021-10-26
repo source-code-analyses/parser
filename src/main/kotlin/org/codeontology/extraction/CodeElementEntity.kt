@@ -22,7 +22,7 @@ import spoon.reflect.declaration.CtAnnotation
 import spoon.reflect.declaration.CtElement
 import spoon.reflect.declaration.CtType
 
-public abstract class CodeElementEntity<E: CtElement>(element: E?): AbstractEntity<E>(element) {
+abstract class CodeElementEntity<E: CtElement>(element: E?): AbstractEntity<E>(element) {
     public override fun buildRelativeURI(): String {
         return buildRelativeURI("")
     }
@@ -60,14 +60,14 @@ public abstract class CodeElementEntity<E: CtElement>(element: E?): AbstractEnti
         return builder.toString()
     }
 
-    public open fun tagComment() {
+    open fun tagComment() {
         val comment: String? = element!!.docComment
         if (comment != null) {
             getLogger().addTriple(this, Ontology.COMMENT_PROPERTY, model.createLiteral(comment))
         }
     }
 
-    public fun tagAnnotations() {
+    fun tagAnnotations() {
         val annotations: List<CtAnnotation<*>> = element!!.annotations
         for(annotation: CtAnnotation<*> in annotations) {
             val annotationType: TypeEntity<*> = getFactory().wrap(annotation.annotationType)!!

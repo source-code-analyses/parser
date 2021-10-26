@@ -17,9 +17,11 @@ package org.codeontology.build
 
 import java.io.File
 
-public class BuildFiles {
+class BuildFiles {
     companion object {
-        @JvmStatic public val MAVEN_FILE: File = File("pom.xml")
-        @JvmStatic public val GRADLE_FILE: File = File("build.gradle")
+        @JvmStatic
+        val MAVEN_FILE: File = File("pom.xml")
+        @JvmStatic
+        val GRADLE_FILE: File = File("build.gradle")
     }
 }

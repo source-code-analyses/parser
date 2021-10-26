@@ -20,13 +20,13 @@ import org.codeontology.extraction.support.BodyTagger
 import spoon.reflect.code.CtLoop
 import spoon.reflect.code.CtStatement
 
-public open class LoopEntity<T: CtLoop>(element: T): StatementEntity<T>(element), BodyHolderEntity<T> {
-    public override fun extract() {
+open class LoopEntity<T: CtLoop>(element: T): StatementEntity<T>(element), BodyHolderEntity<T> {
+    override fun extract() {
         super.extract()
         tagBody()
     }
 
-    public override fun getBody(): StatementEntity<*>? {
+    override fun getBody(): StatementEntity<*>? {
         val statement: CtStatement? = element!!.body
         if (statement != null) {
             val body: StatementEntity<*> = getFactory().wrap(statement)
@@ -37,7 +37,7 @@ public open class LoopEntity<T: CtLoop>(element: T): StatementEntity<T>(element)
         return null
     }
 
-    public override fun tagBody() {
+    override fun tagBody() {
         BodyTagger(this).tagBody()
     }
 }

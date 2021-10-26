@@ -18,17 +18,16 @@ package org.codeontology.build
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.FileFilterUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
-
 import java.io.File
-import java.lang.reflect.Method
 import java.net.MalformedURLException
 import java.net.URL
 import java.net.URLClassLoader
 
-public class ClasspathLoader {
+class ClasspathLoader {
     companion object {
         @JvmStatic private var instance: ClasspathLoader? = null
-        @JvmStatic public fun getInstance(): ClasspathLoader {
+        @JvmStatic
+        fun getInstance(): ClasspathLoader {
             if(instance == null) {
                 instance = ClasspathLoader()
             }
@@ -40,11 +39,11 @@ public class ClasspathLoader {
     private val classpath: HashSet<File> = HashSet()
     private var locked: Boolean = false
 
-    public fun load(path: String) {
+    fun load(path: String) {
         load(File(path))
     }
 
-    public fun load(file: File) {
+    fun load(file: File) {
         if (file.isDirectory) {
             loadAllJars(file)
             return
@@ -69,7 +68,7 @@ public class ClasspathLoader {
         }
     }
 
-    public fun loadAllJars(root: File) {
+    fun loadAllJars(root: File) {
         if (root.isDirectory) {
             val jars: HashSet<File> = HashSet()
 
@@ -81,26 +80,26 @@ public class ClasspathLoader {
         }
     }
 
-    public fun loadAllJars(path: String) {
+    fun loadAllJars(path: String) {
         loadAllJars(File(path))
     }
 
-    public fun loadClasspath(classpath: String) {
+    fun loadClasspath(classpath: String) {
         val paths: List<String> = classpath.split(":")
         for(path: String in paths) {
             load(path)
         }
     }
 
-    public fun getJarsLoaded(): Set<File> {
+    fun getJarsLoaded(): Set<File> {
         return classpath
     }
 
-    public fun lock() {
+    fun lock() {
         locked = true
     }
 
-    public fun release() {
+    fun release() {
         locked = false
     }
 }

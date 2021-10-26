@@ -15,28 +15,26 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.extraction.statement
 
-import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
-import org.codeontology.extraction.RDFLogger
 import org.codeontology.extraction.expression.ExpressionEntity
 import org.codeontology.extraction.support.ExpressionHolderEntity
 import org.codeontology.extraction.support.ExpressionTagger
 import spoon.reflect.code.CtExpression
 import spoon.reflect.code.CtReturn
 
-public class ReturnEntity(element: CtReturn<*>):
+class ReturnEntity(element: CtReturn<*>):
     StatementEntity<CtReturn<*>>(element), ExpressionHolderEntity<CtReturn<*>> {
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.RETURN_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         super.extract()
         tagExpression()
     }
 
-    public override fun getExpression(): ExpressionEntity<*>? {
+    override fun getExpression(): ExpressionEntity<*>? {
         val returnedExpression: CtExpression<*>? = element!!.returnedExpression
         if (returnedExpression != null) {
             val expression: ExpressionEntity<*> = getFactory().wrap(returnedExpression)
@@ -47,7 +45,7 @@ public class ReturnEntity(element: CtReturn<*>):
         return null
     }
 
-    public override fun tagExpression() {
+    override fun tagExpression() {
         ExpressionTagger(this).tagExpression(Ontology.RETURNED_EXPRESSION_PROPERTY)
     }
 }

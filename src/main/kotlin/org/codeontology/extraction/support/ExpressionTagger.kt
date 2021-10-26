@@ -5,12 +5,12 @@ import org.codeontology.Ontology
 import org.codeontology.extraction.RDFLogger
 import org.codeontology.extraction.expression.ExpressionEntity
 
-public class ExpressionTagger(val entity: ExpressionHolderEntity<*>) {
-    public fun tagExpression() {
+class ExpressionTagger(val entity: ExpressionHolderEntity<*>) {
+    fun tagExpression() {
         tagExpression(Ontology.EXPRESSION_PROPERTY)
     }
 
-    public fun tagExpression(property: Property) {
+    fun tagExpression(property: Property) {
         val expression: ExpressionEntity<*> = entity.getExpression()!!
 
         RDFLogger.getInstance().addTriple(entity, property, expression)

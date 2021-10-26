@@ -18,7 +18,7 @@ package org.codeontology.extraction.support
 import org.codeontology.extraction.Entity
 import org.codeontology.extraction.statement.StatementEntity
 
-public interface StatementsHolderEntity<E>: Entity<E> {
+interface StatementsHolderEntity<E>: Entity<E> {
 
     fun getStatements(): List<StatementEntity<*>>
 

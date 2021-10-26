@@ -20,7 +20,6 @@ import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.CodeOntology
 import org.codeontology.Ontology
 import org.codeontology.extraction.AbstractEntity
-import org.codeontology.extraction.Entity
 import org.codeontology.extraction.EntityFactory
 import org.codeontology.extraction.ReflectionFactory
 import org.codeontology.extraction.declaration.PackageEntity
@@ -29,10 +28,8 @@ import java.io.File
 import java.util.*
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
-public class JarFileEntity public constructor(element: JarFile) : AbstractEntity<JarFile>(element) {
+class JarFileEntity(element: JarFile) : AbstractEntity<JarFile>(element) {
     private lateinit var packs: ArrayList<PackageEntity>
     private lateinit var map: HashMap<Package, List<Class<*>>>
 
@@ -40,19 +37,19 @@ public class JarFileEntity public constructor(element: JarFile) : AbstractEntity
         setPackages()
     }
 
-    protected override fun buildRelativeURI(): String {
+    override fun buildRelativeURI(): String {
         return "${getName()}$SEPARATOR${packs.hashCode()}"
     }
 
-    public fun getName(): String {
+    fun getName(): String {
         return File(element?.name ?: "").name
     }
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.JAR_FILE_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         println("Running on ${element?.name}")
         if (CodeOntology.extractProjectStructure()) {
             tagName()
@@ -63,12 +60,12 @@ public class JarFileEntity public constructor(element: JarFile) : AbstractEntity
         println("Triples extracted successfully.")
     }
 
-    public fun tagDependency() {
+    fun tagDependency() {
         val mainProject: ProjectEntity<*> = CodeOntology.getProject()
         getLogger().addTriple(mainProject, Ontology.DEPENDENCY_PROPERTY, this)
     }
 
-    public fun tagPackages() {
+    fun tagPackages() {
         packs.forEach(PackageEntity::extract)
     }
 
@@ -85,7 +82,7 @@ public class JarFileEntity public constructor(element: JarFile) : AbstractEntity
         }
     }
 
-    public fun tagName() {
+    fun tagName() {
         val name: String = getName()
         val label: Literal = model.createTypedLiteral(name)
         getLogger().addTriple(this, Ontology.RDFS_LABEL_PROPERTY, label)

@@ -15,21 +15,21 @@ along with CodeOntology.  If not, see <http://www.gnu.org/licenses/>
 
 package org.codeontology.extraction.support
 
-import org.apache.jena.rdf.model.Literal;
-import org.codeontology.Ontology;
-import org.codeontology.extraction.CodeElementEntity;
-import org.codeontology.extraction.RDFLogger;
-import spoon.reflect.cu.SourcePosition;
+import org.apache.jena.rdf.model.Literal
+import org.codeontology.Ontology
+import org.codeontology.extraction.CodeElementEntity
+import org.codeontology.extraction.RDFLogger
+import spoon.reflect.cu.SourcePosition
 
-public class LineTagger(private val entity: CodeElementEntity<*>) {
+class LineTagger(private val entity: CodeElementEntity<*>) {
     private val position: SourcePosition = entity.element!!.position
 
-    public fun tagLine() {
+    fun tagLine() {
         val line: Literal = entity.model.createTypedLiteral(position.line)
         RDFLogger.getInstance().addTriple(entity, Ontology.LINE_PROPERTY, line)
     }
 
-    public fun tagEndLine() {
+    fun tagEndLine() {
         val endLine: Literal = entity.model.createTypedLiteral(position.endLine)
         RDFLogger.getInstance().addTriple(entity, Ontology.END_LINE_PROPERTY, endLine)
     }

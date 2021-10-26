@@ -18,10 +18,9 @@ package org.codeontology.extraction.project
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
 import org.codeontology.build.maven.MavenProject
-import org.codeontology.extraction.Entity
 
-public class MavenProjectEntity(project: MavenProject): ProjectEntity<MavenProject>(project) {
-    protected override fun getType(): RDFNode {
+class MavenProjectEntity(project: MavenProject): ProjectEntity<MavenProject>(project) {
+    override fun getType(): RDFNode {
         return Ontology.MAVEN_PROJECT_ENTITY
     }
 }

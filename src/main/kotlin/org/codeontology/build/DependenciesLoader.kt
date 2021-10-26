@@ -17,16 +17,16 @@ package org.codeontology.build
 
 import java.io.File
 
-public abstract class DependenciesLoader<out T: Project>(public open val project: T) {
-    public val loader: ClasspathLoader = ClasspathLoader.getInstance()
+abstract class DependenciesLoader<out T: Project>(open val project: T) {
+    val loader: ClasspathLoader = ClasspathLoader.getInstance()
 
-    public abstract fun loadDependencies()
+    abstract fun loadDependencies()
 
-    public fun getJarsLoaded(): Set<File> {
+    fun getJarsLoaded(): Set<File> {
         return loader.getJarsLoaded()
     }
 
-    public fun loadClasspath(classpath: String) {
+    fun loadClasspath(classpath: String) {
         loader.loadClasspath(classpath)
     }
 }

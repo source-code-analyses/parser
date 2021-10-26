@@ -18,7 +18,6 @@ package org.codeontology.extraction.statement
 import org.apache.jena.rdf.model.RDFNode
 import org.codeontology.Ontology
 import org.codeontology.extraction.CodeElementEntity
-import org.codeontology.extraction.Entity
 import org.codeontology.extraction.declaration.ExecutableEntity
 import org.codeontology.extraction.declaration.TypeEntity
 import org.codeontology.extraction.support.LineTagger
@@ -27,14 +26,14 @@ import org.codeontology.extraction.support.StatementsTagger
 import spoon.reflect.code.CtCatch
 import spoon.reflect.reference.CtTypeReference
 
-public class CatchEntity(catcher: CtCatch): CodeElementEntity<CtCatch>(catcher), StatementsHolderEntity<CtCatch> {
-    public var position: Int = 0
+class CatchEntity(catcher: CtCatch): CodeElementEntity<CtCatch>(catcher), StatementsHolderEntity<CtCatch> {
+    var position: Int = 0
 
-    protected override fun getType(): RDFNode {
+    override fun getType(): RDFNode {
         return Ontology.CATCH_ENTITY
     }
 
-    public override fun extract() {
+    override fun extract() {
         tagType()
         tagSourceCode()
         tagLine()
@@ -43,7 +42,7 @@ public class CatchEntity(catcher: CtCatch): CodeElementEntity<CtCatch>(catcher),
         tagCatchFormalParameters()
     }
 
-    public fun tagCatchFormalParameters() {
+    fun tagCatchFormalParameters() {
         val formalParameters: List<TypeEntity<*>> = getCatchFormalParameters()
         for(catchFormalParameter: TypeEntity<*> in formalParameters) {
             getLogger().addTriple(this, Ontology.CATCH_FORMAL_PARAMETER_PROPERTY, catchFormalParameter)
@@ -51,7 +50,7 @@ public class CatchEntity(catcher: CtCatch): CodeElementEntity<CtCatch>(catcher),
         }
     }
 
-    public fun getCatchFormalParameters(): List<TypeEntity<*>> {
+    fun getCatchFormalParameters(): List<TypeEntity<*>> {
         val references: List<CtTypeReference<*>> = element?.parameter?.multiTypes ?: ArrayList()
         val parameters: ArrayList<TypeEntity<*>> = ArrayList()
 
@@ -64,20 +63,20 @@ public class CatchEntity(catcher: CtCatch): CodeElementEntity<CtCatch>(catcher),
         return parameters
     }
 
-    public fun tagLine() {
+    fun tagLine() {
         LineTagger(this).tagLine()
     }
 
-    public override fun getStatements(): List<StatementEntity<*>> {
+    override fun getStatements(): List<StatementEntity<*>> {
         return StatementsTagger(this).asEntities(element?.body?.statements ?: ArrayList())
     }
 
 
-    public override fun tagStatements() {
+    override fun tagStatements() {
         StatementsTagger(this).tagStatements()
     }
 
-    public fun tagEndLine() {
+    fun tagEndLine() {
         LineTagger(this).tagEndLine()
     }
 }

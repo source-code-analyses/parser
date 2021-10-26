@@ -43,12 +43,15 @@ import kotlin.system.exitProcess
 
 class CodeOntology(args: Array<String>) {
     companion object {
-        @JvmStatic public var codeOntology: CodeOntology? = null
+        @JvmStatic
+        var codeOntology: CodeOntology? = null
             private set
         @JvmStatic private var status: Int = 0
-        @JvmStatic public val SUFFIX: String = ".codeontology"
+        @JvmStatic
+        val SUFFIX: String = ".codeontology"
 
-        @JvmStatic public fun main(args: Array<String>) {
+        @JvmStatic
+        fun main(args: Array<String>) {
             codeOntology = CodeOntology(args)
 
             try {
@@ -66,22 +69,26 @@ class CodeOntology(args: Array<String>) {
             exitProcess(status)
         }
 
-        @JvmStatic public fun downloadDependencies(): Boolean {
+        @JvmStatic
+        fun downloadDependencies(): Boolean {
             if(codeOntology == null) {
                 return true
             }
             return codeOntology!!.downloadDependencies
         }
 
-        @JvmStatic public fun signalDependenciesDownloaded() {
+        @JvmStatic
+        fun signalDependenciesDownloaded() {
             codeOntology!!.downloadDependencies = true
         }
 
-        @JvmStatic public fun verboseMode(): Boolean {
+        @JvmStatic
+        fun verboseMode(): Boolean {
             return codeOntology!!.arguments.verboseMode()
         }
 
-        @JvmStatic public fun isJarExplorationEnabled(): Boolean {
+        @JvmStatic
+        fun isJarExplorationEnabled(): Boolean {
             return codeOntology!!.exploreJarsFlag
         }
 
@@ -117,29 +124,34 @@ class CodeOntology(args: Array<String>) {
             }
         }
 
-        @JvmStatic public fun getProject(): ProjectEntity<*> {
+        @JvmStatic
+        fun getProject(): ProjectEntity<*> {
             return codeOntology!!.getProjectEntity()
         }
 
-        @JvmStatic public fun extractProjectStructure(): Boolean {
+        @JvmStatic
+        fun extractProjectStructure(): Boolean {
             return codeOntology!!.arguments.extractProjectStructure()
         }
 
-        @JvmStatic public fun processStatements(): Boolean {
+        @JvmStatic
+        fun processStatements(): Boolean {
             return codeOntology!!.arguments.processStatements()
         }
 
-        @JvmStatic public fun processExpressions(): Boolean {
+        @JvmStatic
+        fun processExpressions(): Boolean {
             return codeOntology!!.arguments.processExpressions()
         }
 
-        @JvmStatic public fun processGenerics(): Boolean {
+        @JvmStatic
+        fun processGenerics(): Boolean {
             return true
         }
     }
 
     private var downloadDependencies: Boolean = false
-    public lateinit var arguments: CodeOntologyArguments
+    lateinit var arguments: CodeOntologyArguments
         private set
     private lateinit var spoon: Launcher
     private var exploreJarsFlag: Boolean = false
@@ -399,7 +411,7 @@ class CodeOntology(args: Array<String>) {
         Thread.currentThread().setUncaughtExceptionHandler{ _, _ -> exit(-1)}
     }
 
-    public fun getProjectEntity(): ProjectEntity<*> {
+    fun getProjectEntity(): ProjectEntity<*> {
         if(projectEntity == null) {
             val visitor = ProjectVisitor()
             project!!.accept(visitor)

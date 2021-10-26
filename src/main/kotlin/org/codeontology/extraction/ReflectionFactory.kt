@@ -21,13 +21,14 @@ import spoon.reflect.reference.*
 
 import java.lang.reflect.*
 
-public class ReflectionFactory {
+class ReflectionFactory {
     private val previousVariables: HashSet<TypeVariable<*>> = hashSetOf()
-    public lateinit var parent: Factory
+    lateinit var parent: Factory
 
     companion object {
         @JvmStatic private var instance: ReflectionFactory? = null
-        @JvmStatic public fun getInstance(): ReflectionFactory {
+        @JvmStatic
+        fun getInstance(): ReflectionFactory {
             if(instance == null) {
                 instance = ReflectionFactory()
             }
@@ -36,7 +37,7 @@ public class ReflectionFactory {
         }
     }
 
-    public fun createParameterizedTypeReference(parameterizedType: ParameterizedType): CtTypeReference<*> {
+    fun createParameterizedTypeReference(parameterizedType: ParameterizedType): CtTypeReference<*> {
         val actualTypeArguments = parameterizedType.actualTypeArguments
         val rawType = parameterizedType.rawType
 
@@ -53,7 +54,7 @@ public class ReflectionFactory {
         return reference
     }
 
-    public fun createTypeReference(type: Type): CtTypeReference<*> {
+    fun createTypeReference(type: Type): CtTypeReference<*> {
         val reference: CtTypeReference<*> = when(type) {
             is ParameterizedType -> createParameterizedTypeReference(type)
             is TypeVariable<*> -> createTypeVariableReference(type)
@@ -66,7 +67,7 @@ public class ReflectionFactory {
         return reference
     }
 
-    public fun createGenericArrayReference(array: GenericArrayType): CtTypeReference<*> {
+    fun createGenericArrayReference(array: GenericArrayType): CtTypeReference<*> {
         var type: Type = array
 
         var i = 0
@@ -83,7 +84,7 @@ public class ReflectionFactory {
         return parent.Type().createArrayReference(componentType, i)
     }
 
-    public fun createTypeVariableReference(typeVariable: TypeVariable<*>): CtTypeParameterReference {
+    fun createTypeVariableReference(typeVariable: TypeVariable<*>): CtTypeParameterReference {
         if (previousVariables.contains(typeVariable)) {
             return parent.Type().createTypeParameterReference(typeVariable.name)
         }
@@ -107,7 +108,7 @@ public class ReflectionFactory {
         return typeParameter
     }
 
-    public fun createWildcardReference(wildcard: WildcardType): CtTypeParameterReference {
+    fun createWildcardReference(wildcard: WildcardType): CtTypeParameterReference {
         val name = "?"
         val upperBounds: Array<Type> = wildcard.upperBounds
         val lowerBounds: Array<Type> = wildcard.lowerBounds
@@ -129,7 +130,7 @@ public class ReflectionFactory {
         return wildcardReference
     }
 
-    public fun createActualExecutable(executableReference: CtExecutableReference<*>): Executable? {
+    fun createActualExecutable(executableReference: CtExecutableReference<*>): Executable? {
         var executable: Executable? = null
         var declaringClass: Class<*>? = null
 
@@ -194,27 +195,27 @@ public class ReflectionFactory {
         return executable
     }
 
-    public fun createTypeReference(clazz: Class<*>): CtTypeReference<*> {
+    fun createTypeReference(clazz: Class<*>): CtTypeReference<*> {
         return parent.Class().createReference(clazz)
     }
 
-    public fun createPackageReference(pack: Package): CtPackageReference {
+    fun createPackageReference(pack: Package): CtPackageReference {
         return parent.Package().createReference(pack)
     }
 
-    public fun createMethod(method: Method): CtExecutableReference<*> {
+    fun createMethod(method: Method): CtExecutableReference<*> {
         return parent.Method().createReference<Method>(method)
     }
 
-    public fun createConstructor(constructorEntity: Constructor<*>): CtExecutableReference<*> {
+    fun createConstructor(constructorEntity: Constructor<*>): CtExecutableReference<*> {
         return parent.Constructor().createReference(constructorEntity)
     }
 
-    public fun createField(field: Field): CtFieldReference<*> {
+    fun createField(field: Field): CtFieldReference<*> {
         return parent.Field().createReference<Field>(field)
     }
 
-    public fun<T: CtElement> clone(t: T): T {
+    fun<T: CtElement> clone(t: T): T {
         return parent.Core().clone(t)
     }
 }
