@@ -39,6 +39,10 @@ class TypeVariableEntity constructor(reference: CtTypeReference<*>) : TypeEntity
     private var bounds = mutableListOf<CtTypeReference<*>>()
     override var parent: Entity<*>? = super.parent
         set(parent) {
+            if(parent == null) {
+                return
+            }
+
             if (!CodeOntology.processGenerics() || isWildcard()) {
                 field = parent
                 return
@@ -69,9 +73,6 @@ class TypeVariableEntity constructor(reference: CtTypeReference<*>) : TypeEntity
             if (realParent != null) {
                 field = parent
                 TypeVariableCache.getInstance().putParent(simpleName, parent, realParent)
-            }
-            else {
-                field = parent
             }
         }
 
@@ -122,13 +123,11 @@ class TypeVariableEntity constructor(reference: CtTypeReference<*>) : TypeEntity
     }
 
     override fun buildRelativeURI(): String {
-        if (!CodeOntology.processGenerics()) {
+        if (!CodeOntology.processGenerics() || parent == null) {
             return getReference().simpleName
         }
 
-        val isWildcard = isWildcard()
-
-        if (isWildcard || parent == null) {
+        if (isWildcard()) {
             return wildcardURI()
         }
 

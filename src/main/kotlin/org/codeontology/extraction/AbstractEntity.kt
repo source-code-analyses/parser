@@ -18,13 +18,14 @@ package org.codeontology.extraction
 import org.apache.jena.rdf.model.RDFNode
 import org.apache.jena.rdf.model.Resource
 import org.codeontology.Ontology
+import spoon.SpoonException
 
 abstract class AbstractEntity<E>(element: E?): Entity<E>, Comparable<Entity<*>> {
     public override var element: E? = element
         protected set
 
     override var parent: Entity<*>? = null
-    private var uri: String? = null
+    private lateinit var uri: String
 
     override fun getResource(): Resource {
         return model.createResource(Ontology.WOC + getRelativeURI())
@@ -43,7 +44,11 @@ abstract class AbstractEntity<E>(element: E?): Entity<E>, Comparable<Entity<*>> 
     }
 
     open fun getSourceCode(): String {
-        return element.toString()
+        return try {
+            element.toString()
+        } catch (e: SpoonException) {
+            ""
+        }
     }
 
 
@@ -60,11 +65,13 @@ abstract class AbstractEntity<E>(element: E?): Entity<E>, Comparable<Entity<*>> 
     }
 
     final override fun getRelativeURI(): String {
-        if (uri == null) {
+        // assert(uri == null)
+
+        if(!this::uri.isInitialized) {
             uri = buildRelativeURI()
         }
 
-        return uri as String
+        return uri
     }
 
     override fun equals(other: Any?): Boolean {

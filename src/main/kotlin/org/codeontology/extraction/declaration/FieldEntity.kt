@@ -39,7 +39,14 @@ class FieldEntity: NamedElementEntity<CtField<*>>, ModifiableEntity<CtField<*>>,
     constructor(field: CtFieldReference<*>): super(field)
 
     override fun buildRelativeURI(): String {
-        return getDeclaringElement()!!.getRelativeURI() + SEPARATOR + (reference?.simpleName ?: "")
+        var uri = (reference?.simpleName ?: "")
+        val declarator = getDeclaringElement()
+
+        if(declarator != null) {
+            uri = declarator.getRelativeURI() + SEPARATOR + uri
+        }
+
+        return uri
     }
 
     override fun getType(): RDFNode {
@@ -80,23 +87,24 @@ class FieldEntity: NamedElementEntity<CtField<*>>, ModifiableEntity<CtField<*>>,
         ModifiableTagger(this).tagModifiers()
     }
 
-    override fun getJavaType(): TypeEntity<*>? {
+    override fun getJavaType(): TypeEntity<*> {
         var type: TypeEntity<*>?
         if (isDeclarationAvailable()) {
             type = getFactory().wrap(element!!.type)
         } else {
             type = getGenericType()
             if (type == null) {
-                val typeReference: CtTypeReference<*>? = (reference as CtFieldReference<*>).type
+                var typeReference: CtTypeReference<*>? = (reference as CtFieldReference<*>).type
+
+                if(typeReference == null) {
+                    typeReference = (reference as CtFieldReference<*>).declaringType
+                }
+
                 type = getFactory().wrap(typeReference)
             }
         }
 
-        if (type == null) {
-           return null
-        }
-
-        type.parent = getDeclaringElement()
+        type!!.parent = getDeclaringElement()
         return type
     }
 
@@ -130,8 +138,10 @@ class FieldEntity: NamedElementEntity<CtField<*>>, ModifiableEntity<CtField<*>>,
             getFactory().wrap(element!!.declaringType)
         } else {
             val reference: CtFieldReference<*> = this.reference as CtFieldReference<*>
-            val declaringType: CtTypeReference<*> = ReflectionFactory.getInstance().clone(reference.declaringType)
-            declaringType.setActualTypeArguments<CtTypeReference<*>>(ArrayList())
+            val declaringType: CtTypeReference<*>? = ReflectionFactory.getInstance().clone(reference.declaringType)
+
+            declaringType?.setActualTypeArguments<CtTypeReference<*>>(ArrayList())
+
             getFactory().wrap(declaringType)
         }
     }

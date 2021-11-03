@@ -21,7 +21,6 @@ import spoon.reflect.declaration.CtConstructor
 import spoon.reflect.reference.CtExecutableReference
 
 class ConstructorEntity: ExecutableEntity<CtConstructor<*>> {
-
     constructor(constructorEntity: CtConstructor<*>): super(constructorEntity)
 
     constructor(reference: CtExecutableReference<*>): super(reference)

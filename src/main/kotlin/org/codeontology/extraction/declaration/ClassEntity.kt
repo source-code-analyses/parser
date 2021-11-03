@@ -76,7 +76,7 @@ open class ClassEntity<T>: TypeEntity<CtClass<T>>, GenericDeclarationEntity<CtCl
         getLogger().addTriple(this, Ontology.SIMPLE_NAME_PROPERTY, name)
     }
 
-    fun tagSuperClass() {
+    private fun tagSuperClass() {
         var superclass: CtTypeReference<*>? = getReference().superclass
         if (superclass == null) {
             superclass = ReflectionFactory.getInstance().createTypeReference(Object::class.java)
@@ -87,11 +87,11 @@ open class ClassEntity<T>: TypeEntity<CtClass<T>>, GenericDeclarationEntity<CtCl
         superClass.follow()
     }
 
-    fun tagSuperInterfaces() {
+    private fun tagSuperInterfaces() {
         tagSuperInterfaces(Ontology.IMPLEMENTS_PROPERTY)
     }
 
-    fun tagConstructors() {
+    private fun tagConstructors() {
         val constructors: List<ConstructorEntity> = getConstructors()
         constructors.forEach { constructor ->
             getLogger().addTriple(this, Ontology.HAS_CONSTRUCTOR_PROPERTY, constructor)
@@ -99,7 +99,7 @@ open class ClassEntity<T>: TypeEntity<CtClass<T>>, GenericDeclarationEntity<CtCl
         getConstructors().forEach(ConstructorEntity::extract)
     }
 
-    fun getConstructors(): List<ConstructorEntity> {
+    private fun getConstructors(): List<ConstructorEntity> {
         if (constructors == null) {
             setConstructors()
         }
@@ -114,11 +114,11 @@ open class ClassEntity<T>: TypeEntity<CtClass<T>>, GenericDeclarationEntity<CtCl
             setConstructorsByReflection()
             return
         }
-        val ctConstructors: Set<CtConstructor<T>> = element?.constructors ?: HashSet()
+        val ctConstructors: Set<CtConstructor<T>> = element!!.constructors ?: HashSet()
         for(ctConstructor: CtConstructor<*> in ctConstructors) {
             val constructor: ConstructorEntity = getFactory().wrap(ctConstructor)
             constructor.parent = this
-            constructors?.add(constructor)
+            constructors!!.add(constructor)
         }
     }
 

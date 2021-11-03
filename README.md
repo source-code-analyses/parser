@@ -37,7 +37,7 @@ Now, you have to install OpenJDK 8:
 $ sudo dpkg -iR openjdk8/amd64
 ```
 
-The above command should install OpenJDK 8. If you get dependecy errors, just type:
+The above command should install OpenJDK 8. If you get dependency errors, just type:
 ```bash
 $ sudo apt-get -f install
 ```

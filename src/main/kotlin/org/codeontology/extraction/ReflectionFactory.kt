@@ -215,7 +215,11 @@ class ReflectionFactory {
         return parent.Field().createReference<Field>(field)
     }
 
-    fun<T: CtElement> clone(t: T): T {
+    fun<T: CtElement> clone(t: T?): T? {
+        if(t == null) {
+            return null
+        }
+
         return parent.Core().clone(t)
     }
 }

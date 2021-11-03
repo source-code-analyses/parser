@@ -80,8 +80,8 @@ class ParameterizedTypeEntity constructor(reference: CtTypeReference<*>) :
     }
 
     fun getGenericType(): TypeEntity<*>? {
-        val cloneReference: CtTypeReference<*> = ReflectionFactory.getInstance().clone(getReference())
-        cloneReference.setActualTypeArguments<CtTypeReference<*>>(ArrayList())
+        val cloneReference: CtTypeReference<*>? = ReflectionFactory.getInstance().clone(getReference())
+        cloneReference?.setActualTypeArguments<CtTypeReference<*>>(ArrayList())
         return getFactory().wrap(cloneReference)
     }
 

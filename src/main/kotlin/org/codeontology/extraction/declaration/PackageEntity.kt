@@ -26,8 +26,7 @@ import spoon.reflect.reference.CtPackageReference
 import spoon.reflect.reference.CtTypeReference
 
 class PackageEntity: NamedElementEntity<CtPackage> {
-    var types: ArrayList<TypeEntity<*>> = setTypes()
-        private set
+    private var types: ArrayList<TypeEntity<*>> = setTypes()
 
     constructor(pack: CtPackage): super(pack)
 
@@ -60,13 +59,13 @@ class PackageEntity: NamedElementEntity<CtPackage> {
         }
     }
 
-    fun tagParent() {
+    private fun tagParent() {
         if (CodeOntology.extractProjectStructure()) {
             getLogger().addTriple(this, Ontology.PROJECT_PROPERTY, parent!!)
         }
     }
 
-    fun tagTypes() {
+    private fun tagTypes() {
         for(type: TypeEntity<*> in types) {
             getLogger().addTriple(this, Ontology.IS_PACKAGE_OF_PROPERTY, type)
             getLogger().addTriple(type, Ontology.HAS_PACKAGE_PROPERTY, this)

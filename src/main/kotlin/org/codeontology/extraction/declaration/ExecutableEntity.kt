@@ -62,6 +62,19 @@ abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, 
 
     override fun buildRelativeURI(): String {
         var uri: String = reference.toString()
+
+        when(this) {
+            is MethodEntity -> {
+                if (parent == null) {
+                    parent = (element?.parent as CtType<*>?)?.let { getFactory().wrap(it) }
+                }
+
+                if (parent != null) {
+                    uri = parent!!.getRelativeURI() + SEPARATOR + uri
+                }
+            }
+        }
+
         uri = uri.replace(", |#", SEPARATOR)
         return uri
     }
@@ -117,7 +130,7 @@ abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, 
         }
     }
 
-    fun tagParameters() {
+    private fun tagParameters() {
         val parameters: List<ParameterEntity> = getParameters()
         for(i in parameters.indices) {
             val parameter: ParameterEntity = parameters[i]
@@ -128,7 +141,7 @@ abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, 
         }
     }
 
-    fun getParameters(): List<ParameterEntity> {
+    private fun getParameters(): List<ParameterEntity> {
         if (parameters == null) {
             setParameters()
         }
@@ -150,7 +163,7 @@ abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, 
         }
     }
 
-    fun tagThrows() {
+    private fun tagThrows() {
         val thrownTypes: Set<CtTypeReference<out Throwable>> = element?.thrownTypes ?: HashSet()
         for(current: CtTypeReference<out Throwable> in thrownTypes) {
             val thrownType: TypeEntity<*>? = getFactory().wrap(current)
@@ -189,7 +202,7 @@ abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, 
 
     }
 
-    fun addAnonymousClasses(statement: CtStatement) {
+    private fun addAnonymousClasses(statement: CtStatement) {
         val newClasses: List<CtNewClass<*>> = statement.getElements{ element -> element != null }
         for(newClass: CtNewClass<*> in newClasses) {
             val anonymousClass: AnonymousClassEntity<*> = AnonymousClassEntity(newClass.anonymousClass)
@@ -198,7 +211,7 @@ abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, 
         }
     }
 
-    fun tagAnonymousClasses() {
+    private fun tagAnonymousClasses() {
         for(anonymousClass: AnonymousClassEntity<*> in anonymousClasses) {
             getLogger().addTriple(this, Ontology.CONSTRUCTS_PROPERTY, anonymousClass)
             anonymousClass.extract()
@@ -206,7 +219,7 @@ abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, 
         }
     }
 
-    fun addInvocations(statement: CtStatement) {
+    private fun addInvocations(statement: CtStatement) {
         val references: List<CtExecutableReference<*>> = statement.getElements(ReferenceTypeFilter(CtExecutableReferenceImpl::class.java))
 
         for(reference: CtExecutableReference<*> in references) {
@@ -221,14 +234,14 @@ abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, 
         }
     }
 
-    fun tagLambdas() {
+    private fun tagLambdas() {
         for(lambda: LambdaEntity in lambdas) {
             tagRequests(lambda)
             lambda.extract()
         }
     }
 
-    fun addLambdas(statement: CtStatement) {
+    private fun addLambdas(statement: CtStatement) {
         val lambdas: List<CtLambda<*>> = statement.getElements{ element -> element != null }
         for(lambda: CtLambda<*> in lambdas) {
             val lambdaEntity: LambdaEntity = getFactory().wrap(lambda)
@@ -237,21 +250,21 @@ abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, 
         }
     }
 
-    fun addRequestedFields(statement: CtStatement) {
+    private fun addRequestedFields(statement: CtStatement) {
         val references: List<CtFieldReference<*>> = statement.getElements(ReferenceTypeFilter(CtFieldReferenceImpl::class.java))
         references.stream()
                 .map(getFactory()::wrap)
                 .forEach(fields::add)
     }
 
-    fun tagRequestedFields() {
+    private fun tagRequestedFields() {
         for(field: FieldEntity in fields) {
             tagRequests(field)
             field.follow()
         }
     }
 
-    fun addRequestedTypes(types: Set<CtTypeReference<*>>) {
+    private fun addRequestedTypes(types: Set<CtTypeReference<*>>) {
         for(reference: CtTypeReference<*> in types) {
             if(!reference.isImplicit) {
                 val type: TypeEntity<*>? = getFactory().wrap(reference)
@@ -263,7 +276,7 @@ abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, 
         }
     }
 
-    fun tagRequestedTypes() {
+    private fun tagRequestedTypes() {
         for(type: TypeEntity<*> in requestedTypes) {
             tagRequests(type)
             type.follow()
@@ -276,7 +289,7 @@ abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, 
         return newClasses.isNotEmpty()
     }
 
-    fun addLocalVariables(statement: CtStatement) {
+    private fun addLocalVariables(statement: CtStatement) {
         val references: List<CtLocalVariableReference<*>> = statement.getElements(ReferenceTypeFilter(CtLocalVariableReferenceImpl::class.java))
 
         for(reference: CtLocalVariableReference<*> in references) {
@@ -289,14 +302,14 @@ abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, 
         }
     }
 
-    fun tagLocalVariables() {
+    private fun tagLocalVariables() {
         for(variable: LocalVariableEntity in localVariables) {
             tagRequests(variable)
             variable.extract()
         }
     }
 
-    fun tagExecutables() {
+    private fun tagExecutables() {
         for(executable: ExecutableEntity<*> in executables) {
             tagRequests(executable)
             if (executable is ConstructorEntity) {
@@ -306,18 +319,19 @@ abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, 
         }
     }
 
-    fun tagConstructs(executable: ExecutableEntity<*>) {
+    private fun tagConstructs(executable: ExecutableEntity<*>) {
         val declaringType: Entity<*>? = executable.getDeclaringElement()
         getLogger().addTriple(this, Ontology.CONSTRUCTS_PROPERTY, declaringType!!)
         declaringType.follow()
     }
 
-    fun tagRequests(requested: Entity<*>) {
+    private fun tagRequests(requested: Entity<*>) {
         getLogger().addTriple(this, Ontology.REFERENCES_PROPERTY, requested)
     }
 
-    fun tagReturnsVariable(returnStatement: CtReturn<*>) {
-        val returned: CtExpression<*> = returnStatement.returnedExpression
+    private fun tagReturnsVariable(returnStatement: CtReturn<*>) {
+        val returned: CtExpression<*> = returnStatement.returnedExpression ?: return
+
         if (returned is CtVariableAccess<*>) {
             val reference: CtVariableReference<*> = returned.variable ?: return
 
@@ -342,7 +356,7 @@ abstract class ExecutableEntity<E>: NamedElementEntity<E>, ModifiableEntity<E>, 
         return requestedResources
     }
 
-    fun tagVarArgs() {
+    private fun tagVarArgs() {
         val parameters: List<ParameterEntity> = getParameters()
         val size: Int = parameters.size
         var value = false

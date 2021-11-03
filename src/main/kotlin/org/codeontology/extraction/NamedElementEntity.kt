@@ -54,7 +54,7 @@ abstract class NamedElementEntity<E: CtNamedElement>: CodeElementEntity<E> {
     }
 
     open fun getName(): String {
-        return reference?.simpleName ?: ""
+        return reference!!.simpleName
     }
 
     fun tagName() {
@@ -68,7 +68,7 @@ abstract class NamedElementEntity<E: CtNamedElement>: CodeElementEntity<E> {
         getLogger().addTriple(this, Ontology.RDFS_LABEL_PROPERTY, label)
     }
 
-    fun splitCamelCase(s: String): String {
+    private fun splitCamelCase(s: String): String {
         return s.replace(
             String.format("%s|%s|%s",
                 "(?<=[A-Z])(?=[A-Z][a-z])",
