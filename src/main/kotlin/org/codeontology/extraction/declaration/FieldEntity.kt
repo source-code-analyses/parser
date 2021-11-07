@@ -87,24 +87,20 @@ class FieldEntity: NamedElementEntity<CtField<*>>, ModifiableEntity<CtField<*>>,
         ModifiableTagger(this).tagModifiers()
     }
 
-    override fun getJavaType(): TypeEntity<*> {
+    override fun getJavaType(): TypeEntity<*>? {
         var type: TypeEntity<*>?
         if (isDeclarationAvailable()) {
             type = getFactory().wrap(element!!.type)
         } else {
             type = getGenericType()
             if (type == null) {
-                var typeReference: CtTypeReference<*>? = (reference as CtFieldReference<*>).type
-
-                if(typeReference == null) {
-                    typeReference = (reference as CtFieldReference<*>).declaringType
-                }
+                val typeReference: CtTypeReference<*>? = (reference as CtFieldReference<*>).type
 
                 type = getFactory().wrap(typeReference)
             }
         }
 
-        type!!.parent = getDeclaringElement()
+        type?.parent = getDeclaringElement()
         return type
     }
 
@@ -113,6 +109,7 @@ class FieldEntity: NamedElementEntity<CtField<*>>, ModifiableEntity<CtField<*>>,
         if (isDeclarationAvailable()) {
             return null
         }
+
         try {
             val reference: CtFieldReference<*> = this.reference as CtFieldReference<*>
             val field: Field = reference.actualField as Field

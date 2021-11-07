@@ -6,8 +6,11 @@ import org.codeontology.extraction.declaration.TypeEntity
 
 class JavaTypeTagger(private val typedElement: TypedElementEntity<*>) {
     fun tagJavaType() {
-        val type: TypeEntity<*> = typedElement.getJavaType()!!
-        RDFLogger.getInstance().addTriple(typedElement, Ontology.JAVA_TYPE_PROPERTY, type)
-        type.follow()
+        val type: TypeEntity<*>? = typedElement.getJavaType()
+
+        if(type != null) {
+            RDFLogger.getInstance().addTriple(typedElement, Ontology.JAVA_TYPE_PROPERTY, type)
+            type.follow()
+        }
     }
 }
