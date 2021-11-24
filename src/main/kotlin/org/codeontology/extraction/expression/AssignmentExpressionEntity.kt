@@ -28,13 +28,13 @@ class AssignmentExpressionEntity(expression: CtAssignment<*, *>): ExpressionEnti
         tagExpression()
     }
 
-    fun tagLeftHandSideExpression() {
+    private fun tagLeftHandSideExpression() {
         val expression: ExpressionEntity<*> = getLeftHandSideExpression()
         getLogger().addTriple(this, Ontology.LEFT_HAND_SIDE_PROPERTY, expression)
         expression.extract()
     }
 
-    fun getLeftHandSideExpression(): ExpressionEntity<*> {
+    private fun getLeftHandSideExpression(): ExpressionEntity<*> {
         val leftHandExpression: ExpressionEntity<*> = getFactory().wrap(element!!.assigned)
         leftHandExpression.parent = this
         return leftHandExpression

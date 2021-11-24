@@ -34,14 +34,14 @@ class AssertEntity(element: CtAssert<*>): StatementEntity<CtAssert<*>>(element),
         tagAssertExpression()
     }
 
-    fun getAssertExpression(): ExpressionEntity<*> {
+    private fun getAssertExpression(): ExpressionEntity<*> {
         val expression: CtExpression<Boolean> = element!!.assertExpression
         val entity: ExpressionEntity<*> = getFactory().wrap(expression)
         entity.parent = this
         return entity
     }
 
-    fun tagAssertExpression() {
+    private fun tagAssertExpression() {
         val assertExpression: ExpressionEntity<*> = getAssertExpression()
         getLogger().addTriple(this, Ontology.ASSERT_EXPRESSION_PROPERTY, assertExpression)
         assertExpression.extract()

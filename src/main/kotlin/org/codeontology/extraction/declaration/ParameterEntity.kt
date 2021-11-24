@@ -62,7 +62,7 @@ class ParameterEntity: NamedElementEntity<CtParameter<*>>, TypedElementEntity<Ct
         return parent!!.getRelativeURI() + SEPARATOR + TAG + SEPARATOR + position
     }
 
-    fun tagPosition() {
+    private fun tagPosition() {
         getLogger().addTriple(this, Ontology.POSITION_PROPERTY, model.createTypedLiteral(position))
     }
 

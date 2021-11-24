@@ -60,8 +60,8 @@ class RDFLogger {
         }
     }
 
-    fun addTriple(subject: Entity<*>, property: Property, obj: Entity<*>) {
-        addTriple(subject, property, obj.getResource())
+    fun addTriple(subject: Entity<*>, property: Property, obj: Entity<*>?) {
+        addTriple(subject, property, obj?.getResource())
     }
 
     fun addTriple(subject: Entity<*>, property: Property?, obj: RDFNode?) {

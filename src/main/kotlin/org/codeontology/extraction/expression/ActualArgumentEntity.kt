@@ -51,7 +51,7 @@ class ActualArgumentEntity(expression: ExpressionEntity<*>): AbstractEntity<Expr
         ExpressionTagger(this).tagExpression()
     }
 
-    fun tagPosition() {
+    private fun tagPosition() {
         val position: Literal = model.createTypedLiteral(position)
         getLogger().addTriple(this, Ontology.POSITION_PROPERTY, position)
     }

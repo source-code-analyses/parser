@@ -108,7 +108,7 @@ class ReflectionFactory {
         return typeParameter
     }
 
-    fun createWildcardReference(wildcard: WildcardType): CtTypeParameterReference {
+    private fun createWildcardReference(wildcard: WildcardType): CtTypeParameterReference {
         val name = "?"
         val upperBounds: Array<Type> = wildcard.upperBounds
         val lowerBounds: Array<Type> = wildcard.lowerBounds

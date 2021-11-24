@@ -46,7 +46,7 @@ class IfThenElseEntity(element: CtIf):
         ConditionTagger(this).tagCondition()
     }
 
-    fun tagThenStatement() {
+    private fun tagThenStatement() {
         val thenStatement: CtStatement = element!!.getThenStatement()
         val statement: StatementEntity<*> = getFactory().wrap(thenStatement)
         statement.parent = this
@@ -55,7 +55,7 @@ class IfThenElseEntity(element: CtIf):
         statement.extract()
     }
 
-    fun tagElseStatement() {
+    private fun tagElseStatement() {
         val elseStatement: CtStatement? = element!!.getElseStatement()
         if (elseStatement != null) {
             val statement: StatementEntity<*> = getFactory().wrap(elseStatement)

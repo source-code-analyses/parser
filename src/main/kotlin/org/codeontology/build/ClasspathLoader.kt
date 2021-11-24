@@ -43,7 +43,7 @@ class ClasspathLoader {
         load(File(path))
     }
 
-    fun load(file: File) {
+    private fun load(file: File) {
         if (file.isDirectory) {
             loadAllJars(file)
             return

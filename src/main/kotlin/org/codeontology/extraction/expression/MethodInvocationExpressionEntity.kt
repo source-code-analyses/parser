@@ -37,7 +37,7 @@ class MethodInvocationExpressionEntity(expression: CtInvocation<*>): AbstractInv
         tagExecutable()
     }
 
-    fun tagTarget() {
+    private fun tagTarget() {
         val target: CtExpression<*>? = element?.target
 
         if (target !is CtTypeAccess<*>) {

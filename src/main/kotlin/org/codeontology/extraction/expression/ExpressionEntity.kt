@@ -42,7 +42,7 @@ open class ExpressionEntity<E: CtExpression<*>>(expression: E):
         tagLine()
     }
 
-    fun tagLine() {
+    private fun tagLine() {
         LineTagger(this).tagLine()
     }
 

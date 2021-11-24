@@ -41,7 +41,7 @@ class JarFileEntity(element: JarFile) : AbstractEntity<JarFile>(element) {
         return "${getName()}$SEPARATOR${packs.hashCode()}"
     }
 
-    fun getName(): String {
+    private fun getName(): String {
         return File(element?.name ?: "").name
     }
 
@@ -60,12 +60,12 @@ class JarFileEntity(element: JarFile) : AbstractEntity<JarFile>(element) {
         println("Triples extracted successfully.")
     }
 
-    fun tagDependency() {
+    private fun tagDependency() {
         val mainProject: ProjectEntity<*> = CodeOntology.getProject()
         getLogger().addTriple(mainProject, Ontology.DEPENDENCY_PROPERTY, this)
     }
 
-    fun tagPackages() {
+    private fun tagPackages() {
         packs.forEach(PackageEntity::extract)
     }
 

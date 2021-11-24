@@ -37,7 +37,7 @@ class FinallyEntity(block: CtBlock<*>):
         tagEndLine()
     }
 
-    fun tagLine() {
+    private fun tagLine() {
         LineTagger(this).tagLine()
     }
 
@@ -49,7 +49,7 @@ class FinallyEntity(block: CtBlock<*>):
         StatementsTagger(this).tagStatements()
     }
 
-    fun tagEndLine() {
+    private fun tagEndLine() {
         LineTagger(this).tagEndLine()
     }
 }

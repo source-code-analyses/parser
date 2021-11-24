@@ -46,7 +46,7 @@ class InterfaceEntity(interfaceReference: CtTypeReference<*>): TypeEntity<CtInte
         }
     }
 
-    fun tagSuperInterfaces() {
+    private fun tagSuperInterfaces() {
         tagSuperInterfaces(Ontology.EXTENDS_PROPERTY)
     }
 

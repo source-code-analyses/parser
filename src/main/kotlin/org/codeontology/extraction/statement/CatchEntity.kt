@@ -42,7 +42,7 @@ class CatchEntity(catcher: CtCatch): CodeElementEntity<CtCatch>(catcher), Statem
         tagCatchFormalParameters()
     }
 
-    fun tagCatchFormalParameters() {
+    private fun tagCatchFormalParameters() {
         val formalParameters: List<TypeEntity<*>> = getCatchFormalParameters()
         for(catchFormalParameter: TypeEntity<*> in formalParameters) {
             getLogger().addTriple(this, Ontology.CATCH_FORMAL_PARAMETER_PROPERTY, catchFormalParameter)
@@ -50,7 +50,7 @@ class CatchEntity(catcher: CtCatch): CodeElementEntity<CtCatch>(catcher), Statem
         }
     }
 
-    fun getCatchFormalParameters(): List<TypeEntity<*>> {
+    private fun getCatchFormalParameters(): List<TypeEntity<*>> {
         val references: List<CtTypeReference<*>> = element?.parameter?.multiTypes ?: ArrayList()
         val parameters: ArrayList<TypeEntity<*>> = ArrayList()
 
@@ -63,7 +63,7 @@ class CatchEntity(catcher: CtCatch): CodeElementEntity<CtCatch>(catcher), Statem
         return parameters
     }
 
-    fun tagLine() {
+    private fun tagLine() {
         LineTagger(this).tagLine()
     }
 
@@ -76,7 +76,7 @@ class CatchEntity(catcher: CtCatch): CodeElementEntity<CtCatch>(catcher), Statem
         StatementsTagger(this).tagStatements()
     }
 
-    fun tagEndLine() {
+    private fun tagEndLine() {
         LineTagger(this).tagEndLine()
     }
 }

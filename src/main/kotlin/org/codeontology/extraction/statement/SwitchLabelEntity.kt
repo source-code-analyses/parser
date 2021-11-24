@@ -34,7 +34,7 @@ abstract class SwitchLabelEntity(label: CtCase<*>): CodeElementEntity<CtCase<*>>
         tagNext()
     }
 
-    fun tagNext() {
+    private fun tagNext() {
         if (next != null) {
             getLogger().addTriple(this, Ontology.NEXT_PROPERTY, next!!)
         }
@@ -49,11 +49,11 @@ abstract class SwitchLabelEntity(label: CtCase<*>): CodeElementEntity<CtCase<*>>
         StatementsTagger(this).tagStatements()
     }
 
-    fun tagLine() {
+    private fun tagLine() {
         LineTagger(this).tagLine()
     }
 
-    fun tagEndLine() {
+    private fun tagEndLine() {
         LineTagger(this).tagEndLine()
     }
 }

@@ -50,11 +50,11 @@ open class StatementEntity<E: CtStatement>(element: E): CodeElementEntity<E>(ele
         }
     }
 
-    fun tagLine() {
+    private fun tagLine() {
         LineTagger(this).tagLine()
     }
 
-    fun tagPosition() {
+    private fun tagPosition() {
         val position: Literal = model.createTypedLiteral(this.position)
         RDFLogger.getInstance().addTriple(this, Ontology.POSITION_PROPERTY, position)
     }

@@ -48,12 +48,12 @@ class ArrayEntity(reference: CtTypeReference<*>):
         return componentType.getRelativeURI() + "[]"
     }
 
-    fun tagArrayOf() {
+    private fun tagArrayOf() {
         getLogger().addTriple(this, Ontology.ARRAY_OF_PROPERTY, componentType)
         componentType.follow()
     }
 
-    fun tagDimensions() {
+    private fun tagDimensions() {
         val dimensions: Int = (getReference() as CtArrayTypeReference<*>).dimensionCount
         getLogger().addTriple(this, Ontology.DIMENSIONS_PROPERTY, model.createTypedLiteral(dimensions))
     }

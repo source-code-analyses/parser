@@ -20,13 +20,13 @@ class LambdaEntity(lambda: CtLambda<*>): NamedElementEntity<CtLambda<*>>(lambda)
 
     private fun tagFunctionalImplements() {
         val implementedType: Entity<*>? = getFactory().wrap(element!!.type)
-        implementedType!!.parent = this.parent
+        implementedType?.parent = this.parent
         getLogger().addTriple(this, Ontology.IMPLEMENTS_PROPERTY, implementedType)
-        implementedType.follow()
+        implementedType?.follow()
     }
 
     override fun buildRelativeURI(): String {
-        return parent!!.getRelativeURI() + SEPARATOR + TAG + SEPARATOR + element?.simpleName
+        return parent!!.getRelativeURI() + SEPARATOR + TAG + SEPARATOR + element!!.simpleName
     }
 
     override fun getType(): RDFNode {

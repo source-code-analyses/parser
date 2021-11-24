@@ -84,7 +84,7 @@ class MavenLoader(project: MavenProject): DependenciesLoader<MavenProject>(proje
      * folder {@code projectRoot}, and save them in
      * projectRoot/target/dependency/.
      */
-    fun downloadDependencies() {
+    private fun downloadDependencies() {
         try {
             val downloadDirectory = File(project.getPath() + PATH_TO_DEPENDENCIES)
 
@@ -113,7 +113,7 @@ class MavenLoader(project: MavenProject): DependenciesLoader<MavenProject>(proje
      * Output folder is the project root, name goes as:
      * {@code dependencyName.jar}.
      */
-    fun jarModules() {
+    private fun jarModules() {
         project.subProjects.forEach{module ->
             run {
                 if (!module.projectDirectory.toPath().equals(project.projectDirectory.toPath())) {

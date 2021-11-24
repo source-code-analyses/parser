@@ -34,7 +34,7 @@ class BlockEntity(element: CtBlock<*>): StatementEntity<CtBlock<*>>(element), St
         tagEndLine()
     }
 
-    fun tagEndLine() {
+    private fun tagEndLine() {
         LineTagger(this).tagEndLine()
     }
 

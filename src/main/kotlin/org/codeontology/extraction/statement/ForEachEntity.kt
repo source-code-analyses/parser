@@ -51,7 +51,7 @@ class ForEachEntity(element: CtForEach):
         return variable
     }
 
-    fun tagVariable() {
+    private fun tagVariable() {
         val variable: LocalVariableEntity = getVariable()
         getLogger().addTriple(this, Ontology.VARIABLE_PROPERTY, variable)
         variable.extract()

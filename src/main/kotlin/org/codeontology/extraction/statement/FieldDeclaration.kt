@@ -54,7 +54,7 @@ class FieldDeclaration(element: CtField<*>): CodeElementEntity<CtField<*>>(eleme
         getLogger().addTriple(parent!!, Ontology.DECLARATION_PROPERTY, this)
     }
 
-    fun tagLine() {
+    private fun tagLine() {
         LineTagger(this).tagLine()
     }
 }

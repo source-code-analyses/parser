@@ -59,7 +59,7 @@ class ForEntity(element: CtFor):
         return forInit
     }
 
-    fun tagForInit() {
+    private fun tagForInit() {
         val forInit: List<Entity<*>> = getForInit().element!!
         for (init: Entity<*> in forInit) {
             getLogger().addTriple(this, Ontology.FOR_INIT_PROPERTY, init)
@@ -74,7 +74,7 @@ class ForEntity(element: CtFor):
         return forUpdate
     }
 
-    fun tagForUpdate() {
+    private fun tagForUpdate() {
         val forUpdate: List<Entity<*>> = getForUpdate().element!!
         for (update: Entity<*> in forUpdate) {
             getLogger().addTriple(this, Ontology.FOR_UPDATE_PROPERTY, update)

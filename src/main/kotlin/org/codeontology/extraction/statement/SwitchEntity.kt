@@ -36,7 +36,7 @@ class SwitchEntity(element: CtSwitch<*>):
         tagSwitchLabels()
     }
 
-    fun tagSwitchLabels() {
+    private fun tagSwitchLabels() {
         val labels: List<SwitchLabelEntity> = getSwitchLabels()
         for (label: SwitchLabelEntity in labels) {
             getLogger().addTriple(this, Ontology.SWITCH_LABEL_PROPERTY, label)
@@ -44,7 +44,7 @@ class SwitchEntity(element: CtSwitch<*>):
         }
     }
 
-    fun getSwitchLabels(): List<SwitchLabelEntity> {
+    private fun getSwitchLabels(): List<SwitchLabelEntity> {
         val labels: ArrayList<CtCase<*>> = ArrayList()
 
         for(case: CtCase<*> in element?.cases!!) {

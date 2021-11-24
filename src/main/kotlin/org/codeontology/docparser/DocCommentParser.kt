@@ -43,7 +43,7 @@ class DocCommentParser(comment: String) {
         tags = ArrayList()
     }
 
-    fun parse() {
+    private fun parse() {
         val scanner = Scanner("\n" + removeDescription())
         scanner.useDelimiter("\\n\\s*@")
         while(scanner.hasNext()) {
@@ -89,7 +89,7 @@ class DocCommentParser(comment: String) {
         return getTags(ReturnTag.TAG)
     }
 
-    fun getTags(name: String): ArrayList<Tag> {
+    private fun getTags(name: String): ArrayList<Tag> {
         if(!parsed) {
             parse()
         }

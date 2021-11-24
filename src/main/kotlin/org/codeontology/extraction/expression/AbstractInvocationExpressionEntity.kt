@@ -45,7 +45,7 @@ abstract class AbstractInvocationExpressionEntity<T>(expression: T): ExpressionE
         }
     }
 
-    fun getExecutable(): ExecutableEntity<*>? {
+    private fun getExecutable(): ExecutableEntity<*>? {
         val reference: CtExecutableReference<*>? = element?.executable
         if (reference != null) {
             val executable: ExecutableEntity<*> = getFactory().wrap(reference)
@@ -57,7 +57,7 @@ abstract class AbstractInvocationExpressionEntity<T>(expression: T): ExpressionE
         return null
     }
 
-    fun getArguments(): List<ActualArgumentEntity> {
+    private fun getArguments(): List<ActualArgumentEntity> {
         val expressions: List<CtExpression<*>>? = element?.arguments
         val arguments: ArrayList<ActualArgumentEntity> = ArrayList()
 

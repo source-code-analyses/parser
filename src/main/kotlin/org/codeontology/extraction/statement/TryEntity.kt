@@ -37,7 +37,7 @@ class TryEntity(element: CtTry):
         tagResources()
     }
 
-    fun tagCatches() {
+    private fun tagCatches() {
         val iterator: Iterator<CatchEntity> = getCatches().iterator()
 
         if (!iterator.hasNext()) {
@@ -59,7 +59,7 @@ class TryEntity(element: CtTry):
         }
     }
 
-    fun tagFinally() {
+    private fun tagFinally() {
         val finallyBlock: FinallyEntity? = getFinally()
         if (finallyBlock != null) {
             getLogger().addTriple(this, Ontology.FINALLY_CLAUSE_PROPERTY, finallyBlock)
@@ -81,7 +81,7 @@ class TryEntity(element: CtTry):
         return catches
     }
 
-    fun tagResources() {
+    private fun tagResources() {
         val resources: List<LocalVariableEntity> = getResources()
         for (resource: LocalVariableEntity in resources) {
             getLogger().addTriple(this, Ontology.RESOURCE_PROPERTY, resource)
@@ -89,7 +89,7 @@ class TryEntity(element: CtTry):
         }
     }
 
-    fun getResources(): List<LocalVariableEntity> {
+    private fun getResources(): List<LocalVariableEntity> {
         val result: ArrayList<LocalVariableEntity> = ArrayList()
 
         if (element is CtTryWithResource) {
@@ -107,7 +107,7 @@ class TryEntity(element: CtTry):
         return result
     }
 
-    fun getFinally(): FinallyEntity? {
+    private fun getFinally(): FinallyEntity? {
         val block: CtBlock<*>? = element?.finalizer
         if (block != null) {
             val finallyBlock = FinallyEntity(block)

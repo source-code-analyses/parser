@@ -108,7 +108,6 @@ class CodeOntology(args: Array<String>) {
                     override fun run() {
                         Runtime.getRuntime().halt(status)
                     }
-
                 }, 30000)
 
                 exitProcess(status)
@@ -166,6 +165,8 @@ class CodeOntology(args: Array<String>) {
     init {
         try {
             spoon = Launcher()
+            spoon.environment.complianceLevel = 16
+
             arguments = CodeOntologyArguments(args)
             exploreJarsFlag = arguments.exploreJars() || (arguments.getJarInput() != null)
             ReflectionFactory.getInstance().parent = spoon.createFactory()

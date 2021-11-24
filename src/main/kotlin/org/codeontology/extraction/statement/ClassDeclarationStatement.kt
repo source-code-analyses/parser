@@ -32,7 +32,7 @@ class ClassDeclarationStatement(element: CtClass<*>): StatementEntity<CtClass<*>
         tagDeclaredClass()
     }
 
-    fun getDeclaredClass(): TypeEntity<*> {
+    private fun getDeclaredClass(): TypeEntity<*> {
         val type: TypeEntity<*> = getFactory().wrap(element as CtType<*>)!!
         type.parent = getParent(ExecutableEntity::class.java, TypeEntity::class.java)!!
         return type

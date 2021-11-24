@@ -62,7 +62,7 @@ abstract class ProjectEntity<T: Project>(project: T): AbstractEntity<T>(project)
         getLogger().addTriple(this, Ontology.RDFS_LABEL_PROPERTY, label)
     }
 
-    fun tagSubProjects() {
+    private fun tagSubProjects() {
         val subProjects: Collection<Project> = element!!.subProjects
         for (subProject: Project in subProjects) {
             val visitor = ProjectVisitor()
@@ -74,7 +74,7 @@ abstract class ProjectEntity<T: Project>(project: T): AbstractEntity<T>(project)
         }
     }
 
-    fun tagBuildFile() {
+    private fun tagBuildFile() {
         if (element!!.getBuildFile() != null) {
             val buildFileContent: String = element!!.getBuildFileContent()
             val buildFileLiteral: Literal = model.createTypedLiteral(buildFileContent)
