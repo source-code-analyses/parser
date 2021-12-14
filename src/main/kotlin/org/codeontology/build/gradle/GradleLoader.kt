@@ -179,7 +179,7 @@ open class GradleLoader(project: GradleProject): DependenciesLoader<GradleProjec
         val cpFileTask = "CodeOntologyCpFile"
         val cpFileTaskBody = "{" + separator +
                 '\t' + "buildDir.mkdirs()" + separator +
-                '\t' + "new File(buildDir, \"" + CLASSPATH_FILE_NAME + "\").text = configurations.runtime.asPath" + separator +
+                '\t' + "new File(buildDir, \"" + CLASSPATH_FILE_NAME + "\").text = sourceSets.main.runtimeClasspath.asPath" + separator +
                 "}"
 
         addTask(cpFileTask, cpFileTaskBody)
@@ -245,7 +245,7 @@ open class GradleLoader(project: GradleProject): DependenciesLoader<GradleProjec
             builder = ProcessBuilder("bash", "-c", "./gradlew $command")
             builder.directory(project.root)
         } else {
-            builder = ProcessBuilder("gradle", command)
+            builder = ProcessBuilder("gradle $command")
             builder.directory(project.projectDirectory)
         }
 
