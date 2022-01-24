@@ -24,6 +24,7 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
+import kotlin.streams.toList
 
 abstract class ProjectEntity<T: Project>(project: T): AbstractEntity<T>(project) {
     override fun buildRelativeURI(): String {

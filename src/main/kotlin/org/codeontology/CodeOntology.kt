@@ -39,6 +39,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
 import java.util.regex.Pattern
+import kotlin.streams.toList
 import kotlin.system.exitProcess
 
 class CodeOntology(args: Array<String>) {

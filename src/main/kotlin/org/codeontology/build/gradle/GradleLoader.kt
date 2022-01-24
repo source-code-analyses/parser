@@ -242,6 +242,7 @@ open class GradleLoader(project: GradleProject): DependenciesLoader<GradleProjec
             if (!gradlew.setExecutable(true)) {
                 CodeOntology.showWarning("Could not execute gradlew")
             }
+
             builder = ProcessBuilder("bash", "-c", "./gradlew $command")
             builder.directory(project.root)
         } else {

@@ -33,6 +33,10 @@ class MavenLoader(project: MavenProject): DependenciesLoader<MavenProject>(proje
     private val output: File = File(project.getPath() + "/output")
     private val error: File = File(project.getPath() + "/error")
 
+    private val maven: String = if(System.getProperty("os.name").lowercase().contains("windows")) {
+        "mvn.cmd"
+    } else "mvn"
+
     override fun loadDependencies() {
         println("Loading dependencies with Maven")
         try {
@@ -41,7 +45,7 @@ class MavenLoader(project: MavenProject): DependenciesLoader<MavenProject>(proje
                 jarModules()
             }
 
-            val builder = ProcessBuilder("mvn", "dependency:build-classpath", "-Dmdep.outputFile=.cp")
+            val builder = ProcessBuilder(maven, "dependency:build-classpath", "-Dmdep.outputFile=.cp")
             builder.directory(project.projectDirectory)
             builder.redirectError(error)
             builder.redirectOutput(output)
@@ -95,7 +99,7 @@ class MavenLoader(project: MavenProject): DependenciesLoader<MavenProject>(proje
             }
 
             println("Downloading dependencies...")
-            val builder = ProcessBuilder("mvn", "dependency:copy-dependencies")
+            val builder = ProcessBuilder(maven, "dependency:copy-dependencies")
             builder.directory(project.projectDirectory)
             builder.redirectError(error)
             builder.redirectOutput(output)
@@ -119,7 +123,7 @@ class MavenLoader(project: MavenProject): DependenciesLoader<MavenProject>(proje
                 if (!module.projectDirectory.toPath().equals(project.projectDirectory.toPath())) {
                     println("Preparing module " + module.getPath())
                     try {
-                        val builder = ProcessBuilder("mvn", "jar:jar")
+                        val builder = ProcessBuilder(maven, "jar:jar")
                         builder.directory(module.projectDirectory)
                         builder.redirectError(error)
                         builder.redirectOutput(output)

@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "me.oliver"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -25,7 +25,7 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "16"
+    kotlinOptions.jvmTarget = "11"
 }
 
 application {
