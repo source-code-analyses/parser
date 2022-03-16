@@ -39,7 +39,6 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
 import java.util.regex.Pattern
-import kotlin.streams.toList
 import kotlin.system.exitProcess
 
 class CodeOntology(args: Array<String>) {
@@ -166,7 +165,8 @@ class CodeOntology(args: Array<String>) {
     init {
         try {
             spoon = Launcher()
-            spoon.environment.complianceLevel = 9
+            spoon.environment.complianceLevel = 16
+            spoon.environment.isAutoImports = false
 
             arguments = CodeOntologyArguments(args)
             exploreJarsFlag = arguments.exploreJars() || (arguments.getJarInput() != null)

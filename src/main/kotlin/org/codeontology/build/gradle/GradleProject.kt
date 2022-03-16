@@ -46,8 +46,10 @@ open class GradleProject(projectDirectory: File) : Project(projectDirectory) {
         setUp()
         val subProjects: HashSet<File> = HashSet()
         val task: String = "subprojects {\n" +
-                "\ttask CodeOntologySub << {\n" +
-                "\t\ttask -> new File(rootDir, \"" + SUBPROJECTS_FILE_NAME + "\").append(\"\$task.project.projectDir\\n\");\n" +
+                "\ttask CodeOntologySub {\n" +
+                "\t\tdoLast {" +
+                "\t\t\ttask -> new File(rootDir, \"" + SUBPROJECTS_FILE_NAME + "\").append(\"\$task.project.projectDir\\n\")\n" +
+                "\t\t}\n" +
                 "\t}\n" +
                 "}"
         val buildFile: File? = getBuildFile()
